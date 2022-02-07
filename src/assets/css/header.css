@@ -1,0 +1,33 @@
+.header {
+  height: 68px;
+  margin: 0;
+  background-color: #273252;
+}
+
+.worning-url {
+  width: 1225px;
+  height: 38px;
+  background: #ffffff;
+  border-radius: 30px;
+}
+.worning-topic {
+  font: Roboto;
+  weight: 700;
+  style: normal;
+  size: 22px;
+  line-height: 25.78px;
+}
+
+.worning-content {
+  font: Roboto;
+  weight: 300;
+  style: normal;
+  size: 18px;
+  line-height: 21.09px;
+}
+
+.worning-cancel {
+  font-size: 17px;
+  color: #fff;
+  margin-left: 23px;
+}

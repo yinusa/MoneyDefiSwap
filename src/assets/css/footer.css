@@ -1,0 +1,76 @@
+.footer {
+  background-color: #151c2f;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 4rem;
+  color: white;
+}
+
+.footer h4 {
+  padding: 1rem 0rem;
+}
+
+.social-icon {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 25px;
+}
+
+.mail-info {
+  color: white;
+  font-size: 15px;
+  padding: 1rem 0rem;
+}
+
+p {
+  margin: 0;
+}
+
+.custom-form {
+  background-color: transparent;
+  border: 1.5px solid #e0b000;
+  box-sizing: border-box;
+  border-radius: 12px;
+  color: #e0b000;
+  line-height: 2.3rem;
+  width: 100%;
+  padding: 0.2rem 1rem;
+}
+
+.custom-form :active,
+.custom-form:focus {
+  border: 0.5px solid #e0b000;
+  outline: none;
+}
+
+.custom-form::placeholder {
+  color: #e0b000;
+}
+
+.btn {
+  cursor: pointer;
+  padding: 0.3rem 2rem;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.btn-subscribe {
+  background-color: #e0b000;
+  color: black;
+  font-size: 16px;
+  margin-top: 0.5rem;
+}
+
+.btn-subscribe:hover {
+  background-color: #b89105;
+}
+
+.copyright {
+  background-color: #e0b000;
+  padding: 0.7rem 4rem;
+  width: 100%;
+}

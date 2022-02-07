@@ -1,0 +1,34 @@
+.content {
+  background-color: #151c2f;
+  position: relative;
+  z-index: -10;
+}
+
+.top-gradient {
+  position: absolute;
+  width: 1440px;
+  height: 686px;
+  right: 0px;
+  top: 0px;
+  z-index: -2;
+  background: linear-gradient(
+    213.03deg,
+    #e0b000 -9.15%,
+    rgba(224, 176, 0, 0) 37.43%
+  );
+}
+
+.bottom-gradient {
+  position: absolute;
+  width: 1440px;
+  height: 686px;
+  right: 0px;
+  top: 1330px;
+
+  background: linear-gradient(
+    213.03deg,
+    #e0b000 -9.15%,
+    rgba(224, 176, 0, 0) 37.43%
+  );
+  transform: matrix(1, 0, 0, -1, 0, 0);
+}
