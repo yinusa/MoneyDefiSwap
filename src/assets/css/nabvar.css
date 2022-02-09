@@ -91,10 +91,54 @@
   height: 28px;
   background-image: url(../img/lang.svg);
   background-size: contain;
+  position: relative;
 }
 
 .lang-drop {
   font-size: 12px;
   color: #fff;
   margin: 20px 23px 0 3px;
+}
+
+.language-content {
+  display: none;
+  position: absolute;
+  width: 140px;
+  height: 101px;
+  background-color: #e5e5e5;
+  min-width: 160px;
+  top: 53px;
+  right: 14px;
+  z-index: 1;
+  border-radius: 5px;
+}
+
+.closeLanguage {
+  width: 17px;
+  height: 17px;
+  display: block;
+  margin-left: 140px;
+}
+
+.language-content button {
+  color: #151c2f;
+  background-color: #e0b000;
+  width: 126px;
+  height: 22px;
+  border-radius: 5px;
+  border: none;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  margin: 2.5px 16.5px;
+}
+
+.dropdown button:hover {
+  color: #ddd;
+}
+
+.show {
+  display: block;
 }

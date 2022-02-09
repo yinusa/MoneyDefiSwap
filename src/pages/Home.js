@@ -8,9 +8,9 @@ import '../assets/css/home.css'
 const Home = () => {
     return (
         <Content className="home">
-            <div className="first-article d-flex justify-content-end">
-                <div className="d-flex .justify-content-*-center"><img src={Charactor1}></img></div>
-                <div>
+            <div className="first-article d-flex justify-content-around">
+                <div className="d-flex justify-content-end col-7"><img src={Charactor1}></img></div>
+                <div className="col-5">
                     <p className="home-font1 first-article-topic">MoneyDefiSwap</p>
                     <p className="home-font2 first-article-explain">Together to the future with MoneydefiSwap $MSD> </p>
                     <p className="home-font3 first-article-content">$MSD also aims to bring businesses and developers together to solve real-world problems with the shared values of transparency, fee-less transaction, social and economic inclusion, environmental sustainability.</p>
@@ -30,14 +30,15 @@ const Home = () => {
                 </div>
                 <div><img src={Hand}></img></div>
             </div>
-            <div className="third-article d-flex justify-content-end">
-                <div className="d-flex .justify-content-*-center"><img src={Money}></img></div>
-                <div>
+            <div className="third-article d-flex justify-content-center">
+                <div className="d-flex justify-content-center col-7"><img src={Money}></img></div>
+                <div className="col-5">
                     <p className="home-font1 third-article-topic">Together to the future</p>
-                    <p className="home-font3 third -article-content">MoneydefiSwap is an innovative BEP-20 token that uses complex
+                    <p className="home-font3 third-article-content">MoneydefiSwap is an innovative BEP-20 token that uses complex
                         algorithms to generate automatic gas-less yield rewards, rewards, incentivizes
                         holding while stabilizing the price through automatically generating
-                        liquidity, providing an unbreakable price floor.
+                        liquidity, providing an unbreakable price floor.<br />
+                        <br />
 
                         What makes MoneydefiSwap truly Money shot growing up is the
                         the automatic market-making mechanism that guarantees an ever-lasting
