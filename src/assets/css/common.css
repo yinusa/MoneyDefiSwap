@@ -1,7 +1,6 @@
 .content {
   background-color: #151c2f;
   position: relative;
-  z-index: -10;
 }
 
 .top-gradient {
@@ -10,7 +9,6 @@
   height: 686px;
   right: 0px;
   top: 0px;
-  z-index: -2;
   background: linear-gradient(
     213.03deg,
     #e0b000 -9.15%,

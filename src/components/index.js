@@ -1,38 +1,32 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Header from './Header'
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Sidebar from './Sidebar'
-import Home from '../pages/Home';
+import Home from '../pages/home/Home';
 import "antd/dist/antd.css";
 import '../assets/css/common.css'
-class Dashboard extends Component {
-    state = {
-        collapsed: true,
+
+const Dashboard = () => {
+    const [menuCollapse, setMenuCollapse] = useState(true)
+    const menuIconClick = () => {
+        menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
     };
 
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
-    };
-
-    render() {
-        return (
-            <div>
-                <Header />
-                <Navbar collapsed={this.state.collapsed} toggle={this.toggle} />
-                <div className='content d-flex'>
-                    <div className='top-gradient' />
-                    <div className="middle-gradient" />
-                    <Sidebar collapsed={this.state.collapsed} />
-                    <Home />
-                    <div className='bottom-gradient' />
-                </div>
-                <Footer />
-            </div >
-        )
-    }
+    return (
+        <div>
+            <Header />
+            <Navbar collapsed={menuCollapse} toggle={menuIconClick} />
+            <div className='content d-flex'>
+                <div className='top-gradient' />
+                <div className="middle-gradient" />
+                <Sidebar collapsed={menuCollapse} />
+                <Home />
+                <div className='bottom-gradient' />
+            </div>
+            <Footer />
+        </div >
+    )
 }
 
 export default Dashboard;

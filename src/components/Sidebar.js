@@ -1,46 +1,75 @@
-import React from 'react';
-import "antd/dist/antd.css";
+import React, { useState } from "react";
+
+import {
+    ProSidebar,
+    Menu,
+    MenuItem,
+    SidebarContent,
+    SubMenu,
+} from "react-pro-sidebar";
+
+import { FaTractor, FaExchangeAlt, FaFacebook, FaPinterest, FaYoutubeSquare, FaInstagramSquare, FaRegSun } from "react-icons/fa";
+import { BiCategory, BiHome } from "react-icons/bi";
+
+import Inflatable from '../assets/img/inflatable.svg'
+
+import "react-pro-sidebar/dist/css/styles.css";
 import '../assets/css/sidebar.css'
 
-import { FaHome, FaTractor, FaExchangeAlt } from 'react-icons/fa'
-import Application from '../assets/img/application.svg'
-import Inflatable from '../assets/img/inflatable.svg'
-import Exchange from '../assets/img/exchange.svg'
 
-import { Layout, Menu } from "antd";
-const { Sider } = Layout;
-const { SubMenu } = Menu;
+//import sidebar css from react-pro-sidebar module and our custom css 
 
 const Sidebar = (props) => {
     const bg1 = '#E0B000'
     const bg2 = '#151C2F'
 
     return (
-        <Sider trigger={null} collapsible collapsed={props.collapsed} className='sideMenu' collapsedWidth='68px' width='332px' style={{ backgroundColor: props.collapsed ? bg1 : bg2 }}>
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} style={{ backgroundColor: props.collapsed ? bg1 : bg2 }}>
-                <Menu.Item key="1" icon={<FaHome />}>
-                    Home
-                </Menu.Item>
-                <SubMenu key="sub1" icon={<img src={Exchange} />} title="Trade/Exchange">
-                    <Menu.Item key="2">Trade</Menu.Item>
-                    <Menu.Item key="3">Liquidity</Menu.Item>
-                </SubMenu>
-                <Menu.Item key="4" icon={<FaTractor />}>
-                    Farm
-                </Menu.Item>
-                <Menu.Item key="5" icon={<img src={Inflatable} />}>
-                    Pool
-                </Menu.Item>
-                <SubMenu key="sub2" icon={<img src={Application} />} title="More">
-                    <Menu.Item key="6">Moneydefi Website</Menu.Item>
-                    <Menu.Item key="7">Poocoin Chart</Menu.Item>
-                    <Menu.Item key="8">Token Contract Address</Menu.Item>
-                    <Menu.Item key="9">Product</Menu.Item>
-                    <Menu.Item key="10">Dex Tool</Menu.Item>
-                    <Menu.Item key="11">Audit</Menu.Item>
-                </SubMenu>
-            </Menu>
-        </Sider >
+        <div id="sidbar">
+            <ProSidebar collapsed={props.collapsed}>
+                <SidebarContent style={{ backgroundColor: props.collapsed ? bg1 : bg2 }}>
+                    <Menu iconShape="square">
+                        <MenuItem active={true} icon={<BiHome />}>
+                            Home
+                        </MenuItem>
+                        <SubMenu icon={<FaExchangeAlt />} title='Trade/Exchange'>
+                            <MenuItem>Trade</MenuItem>
+                            <MenuItem>Liquidity</MenuItem>
+                        </SubMenu>
+                        <MenuItem icon={<FaTractor />}>
+                            Farm
+                        </MenuItem>
+                        <MenuItem icon={<img src={Inflatable} />}>
+                            Pool
+                        </MenuItem>
+                        <SubMenu icon={<BiCategory />} title='More'>
+                            <MenuItem>Moneydefi Website</MenuItem>
+                            <MenuItem>Poocoin Chart</MenuItem>
+                            <MenuItem>Token Contract Address</MenuItem>
+                            <MenuItem>Product</MenuItem>
+                            <MenuItem>Dex Tool</MenuItem>
+                            <MenuItem>Audit</MenuItem>
+                        </SubMenu>
+                    </Menu>
+                    <div className="justify-content-around others" style={{ display: props.collapsed ? 'none' : 'flex' }}>
+                        <div className="d-flex">
+                            <div class="toggleWrapper">
+                                <label class="switch">
+                                    <input type="checkbox" />
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div><FaRegSun className="other-connect-icon" /></div>
+                        </div>
+                        <div className="d-flex other-connect">
+                            <a><FaFacebook className="other-connect-icon" /></a>
+                            <a><FaInstagramSquare className="other-connect-icon" /></a>
+                            <a><FaPinterest className="other-connect-icon" /></a>
+                            <a><FaYoutubeSquare className="other-connect-icon" /></a>
+                        </div>
+                    </div>
+                </SidebarContent>
+            </ProSidebar>
+        </div>
     )
 }
 
