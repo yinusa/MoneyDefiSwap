@@ -52,10 +52,10 @@ const Sidebar = (props) => {
                     </Menu>
                     <div className="justify-content-around others" style={{ display: props.collapsed ? 'none' : 'flex' }}>
                         <div className="d-flex">
-                            <div class="toggleWrapper">
-                                <label class="switch">
+                            <div className="toggleWrapper">
+                                <label className="switch">
                                     <input type="checkbox" />
-                                    <span class="slider round"></span>
+                                    <span className="slider round"></span>
                                 </label>
                             </div>
                             <div><FaRegSun className="other-connect-icon" /></div>

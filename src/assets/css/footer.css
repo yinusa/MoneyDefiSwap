@@ -74,3 +74,8 @@ p {
   padding: 0.7rem 4rem;
   width: 100%;
 }
+
+.markName {
+  font-size: 29px;
+  line-height: 33px;
+}

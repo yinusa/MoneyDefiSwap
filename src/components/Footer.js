@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <div>
       <div className="footer">
-        <Col lg={4} md={4} sm={6}>
+        <Col lg={6} md={6} sm={6}>
           <div className="navLeft d-flex">
             <div
               className="mark align-self-center"

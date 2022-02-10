@@ -12,7 +12,7 @@ const Home = () => {
                 <div className="d-flex justify-content-end col-7"><img src={Charactor1}></img></div>
                 <div className="col-5">
                     <p className="home-font1 first-article-topic">MoneyDefiSwap</p>
-                    <p className="home-font2 first-article-explain">Together to the future with MoneydefiSwap $MSD> </p>
+                    <p className="home-font2 first-article-explain">Together to the future with MoneydefiSwap $MSD&gt; </p>
                     <p className="home-font3 first-article-content">$MSD also aims to bring businesses and developers together to solve real-world problems with the shared values of transparency, fee-less transaction, social and economic inclusion, environmental sustainability.</p>
                     <button className="btn-home-trade">TRADE NOW</button>
                 </div>
