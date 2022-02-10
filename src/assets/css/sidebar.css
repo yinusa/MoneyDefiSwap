@@ -164,6 +164,9 @@
   background-color: #fff;
   -webkit-transition: 0.4s;
   transition: 0.4s;
+  align-items: center;
+  display: flex;
+  color: #e0b000;
 }
 
 .slider:before {
@@ -172,6 +175,9 @@
   height: 26px;
   width: 26px;
   background-color: #e0b000;
+  background-image: url('../img/icon_light_top.svg');
+  background-repeat: no-repeat;
+  background-position: center;
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -188,6 +194,9 @@ input:checked + .slider:before {
   -webkit-transform: translateX(34px);
   -ms-transform: translateX(34px);
   transform: translateX(34px);
+  background-image: url('../img/icon_dark_top.svg');
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* Rounded sliders */
@@ -197,4 +206,13 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.light-icon {
+  width: 27px;
+}
+
+.dark-icon {
+  margin-left: auto;
+  margin-right: 5px;
 }

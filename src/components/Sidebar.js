@@ -12,6 +12,10 @@ import { FaTractor, FaExchangeAlt, FaFacebook, FaPinterest, FaYoutubeSquare, FaI
 import { BiCategory, BiHome } from "react-icons/bi";
 
 import Inflatable from '../assets/img/inflatable.svg'
+import LightIcon from '../assets/img/icon_light.svg';
+import LightIconTop from '../assets/img/icon_light_top.svg';
+import DarkIcon from '../assets/img/icon_dark.svg';
+import DarkIconTop from '../assets/img/icon_dark_top.svg';
 
 import "react-pro-sidebar/dist/css/styles.css";
 import '../assets/css/sidebar.css'
@@ -55,7 +59,11 @@ const Sidebar = (props) => {
                             <div className="toggleWrapper">
                                 <label className="switch">
                                     <input type="checkbox" />
-                                    <span className="slider round"></span>
+                                    <span className="slider round">
+                                        <img className="light-icon" src={LightIcon} />
+                                        /
+                                        <img className="dark-icon" src={DarkIcon} />
+                                    </span>
                                 </label>
                             </div>
                             <div><FaRegSun className="other-connect-icon" /></div>
