@@ -107,7 +107,8 @@ p {
 }
 
 .light-btn-subscribe:hover {
-  background-color: #151C2F;
+  background-color: #2e3342;
+  color: #E0B000;
 }
 
 .copyright {
