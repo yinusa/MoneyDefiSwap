@@ -1,6 +1,13 @@
 .navbar {
   height: 68px;
+}
+
+.dark_navbar {
   background: #151c2f;
+}
+
+.light_navbar {
+  background: #FFF4CA;
 }
 
 .navbars {
@@ -10,21 +17,38 @@
 }
 
 .mark {
-  background-image: url(../img/mark.svg);
-  background-color: #151c2f;
   width: 54px;
   height: 51px;
   margin-left: 37px;
 }
 
+.dark_mark {
+  background-image: url(../img/mark.svg);
+  background-color: #151c2f;
+}
+
+.light_mark {
+  background-image: url(../img/mark_color.svg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .mark-name {
-  color: #fff;
   font-family: Roboto;
   font-style: normal;
   font-weight: 500;
   font-size: 29px;
   line-height: 34px;
   margin-left: 11px;
+}
+
+.dark_mark_name {
+  color: #fff;
+}
+
+.light_mark_name {
+  color: #000;
 }
 
 .small-mark {
@@ -48,7 +72,6 @@
   font-weight: 300;
   font-size: 22px;
   line-height: 26px;
-  color: #ffffff;
   margin-right: 5px;
 }
 
@@ -58,7 +81,6 @@
   font-weight: 700;
   font-size: 22px;
   line-height: 25.78px;
-  color: #ffffff;
 }
 
 .balance-e {
@@ -67,7 +89,6 @@
   font-weight: 300;
   font-size: 22px;
   line-height: 25.78px;
-  color: #ffffff;
   margin-right: 17px;
 }
 
@@ -75,7 +96,6 @@
   width: 192px;
   height: 36px;
   display: flex;
-  background: #e0b000;
   border-radius: 30px;
   font-family: Roboto;
   font-style: normal;
@@ -84,6 +104,17 @@
   line-height: 26px;
   align-items: center;
   margin-right: 34px;
+  cursor: pointer;
+}
+
+.dark_connect_wallet {
+  background: #e0b000;
+  color: #151C2F;
+}
+
+.light_connect_wallet {
+  background: #273252;
+  color: #FFFFFF;
 }
 
 .language > div {
@@ -141,4 +172,14 @@
 
 .show {
   display: block;
+}
+
+.light_balance {
+  margin: auto;
+  color: #001F66;
+}
+
+.dark_balance {
+  margin: auto;
+  color: #fff;
 }

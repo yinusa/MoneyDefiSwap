@@ -1,7 +1,14 @@
 .header {
   height: 68px;
   margin: 0;
+}
+
+.dark_header {
   background-color: #273252;
+}
+
+.light_header {
+  background-color: #E0B000;
 }
 
 .worning-url {
