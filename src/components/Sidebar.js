@@ -19,20 +19,26 @@ import DarkIconTop from '../assets/img/icon_dark_top.svg';
 
 import "react-pro-sidebar/dist/css/styles.css";
 import '../assets/css/sidebar.css'
-
+import { ThemeContext } from "../contexts";
 
 //import sidebar css from react-pro-sidebar module and our custom css 
 
 const Sidebar = (props) => {
     const bg1 = '#E0B000'
     const bg2 = '#151C2F'
+    const themeDispatch = React.useContext(ThemeContext.Dispatch);
+    const themeState = React.useContext(ThemeContext.State);
 
+    const handleChangeThem = () => {
+        themeDispatch({type:'light'});
+    }
+    console.log(themeState.on)
     return (
         <div id="sidbar">
             <ProSidebar collapsed={props.collapsed}>
-                <SidebarContent style={{ backgroundColor: props.collapsed ? bg1 : bg2 }}>
-                    <Menu iconShape="square">
-                        <MenuItem active={true} icon={<BiHome />}>
+                <SidebarContent className={themeState.on ? props.collapsed ? 'light_background_close' : 'light_background_open' : props.collapsed ? 'dark_background_close' : 'dark_background_open'}>
+                    <Menu className={themeState.on ? 'light-text' : 'dark-text'} iconShape="square">
+                        <MenuItem active={false} icon={<BiHome />}>
                             Home
                         </MenuItem>
                         <SubMenu icon={<FaExchangeAlt />} title='Trade/Exchange'>
@@ -58,7 +64,7 @@ const Sidebar = (props) => {
                         <div className="d-flex">
                             <div className="toggleWrapper">
                                 <label className="switch">
-                                    <input type="checkbox" />
+                                    <input type="checkbox" onChange={handleChangeThem}/>
                                     <span className="slider round">
                                         <img className="light-icon" src={LightIcon} />
                                         /

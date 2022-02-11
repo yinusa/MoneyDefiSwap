@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import '../assets/css/header.css'
 import { FaTimes } from "react-icons/fa";
+import { ThemeContext } from '../contexts';
 
 const Header = () => {
+    const themeState = React.useContext(ThemeContext.State)
+    console.log(themeState.on);
     const [worningTopic, setWorningTopic] = useState("PHISHING WARNING:");
     const [worningContent, setWorningContent] = useState("Please make sure you're visiting https://moneydefiswap.net/ - check the URL carefully.");
     const [worningState, setWorningState] = useState(false);
