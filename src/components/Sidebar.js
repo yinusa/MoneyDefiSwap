@@ -38,7 +38,7 @@ const Sidebar = (props) => {
             <ProSidebar collapsed={props.collapsed}>
                 <SidebarContent className={themeState.on ? props.collapsed ? 'light_background_close' : 'light_background_open' : props.collapsed ? 'dark_background_close' : 'dark_background_open'}>
                     <Menu className={themeState.on ? 'light-text' : 'dark-text'} iconShape="square">
-                        <MenuItem active={false} icon={<BiHome />}>
+                        <MenuItem active={true} icon={<BiHome />}>
                             Home
                         </MenuItem>
                         <SubMenu icon={<FaExchangeAlt />} title='Trade/Exchange'>
