@@ -1,16 +1,19 @@
-.content {
+.dark_content {
   background-color: #151c2f;
   position: relative;
-  z-index: -10;
+}
+
+.light-content {
+  background-color: #FFF4CA;
+  position: relative;
 }
 
 .top-gradient {
   position: absolute;
-  width: 1440px;
+  width: 100%;
   height: 686px;
   right: 0px;
   top: 0px;
-  z-index: -2;
   background: linear-gradient(
     213.03deg,
     #e0b000 -9.15%,
@@ -18,12 +21,26 @@
   );
 }
 
+.middle-gradient {
+  position: absolute;
+  width: 100%;
+  height: 686px;
+  left: 0px;
+  top: 128px;
+  background: linear-gradient(
+    213.03deg,
+    #e0b000 -9.15%,
+    rgba(224, 176, 0, 0) 37.43%
+  );
+  transform: rotate(-180deg);
+}
+
 .bottom-gradient {
   position: absolute;
-  width: 1440px;
-  height: 686px;
+  width: 100%;
+  height: 690px;
   right: 0px;
-  top: 1330px;
+  bottom: 0;
 
   background: linear-gradient(
     213.03deg,

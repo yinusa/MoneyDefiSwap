@@ -1,48 +1,34 @@
+import React, { useState } from "react";
 import Header from './Header'
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Sidebar from './Sidebar'
-import Home from '../pages/Home';
-import '../assets/css/common.css'
-
-import React, { Component } from "react";
-
-
-
+import Home from '../pages/home/Home';
 import "antd/dist/antd.css";
-import { Layout, Menu } from "antd";
-const { Sider } = Layout;
-const { SubMenu } = Menu;
+import '../assets/css/common.css'
+import { ThemeContext } from '../contexts';
 
-
-
-
-
-class Dashboard extends Component {
-    state = {
-        collapsed: true,
+const Dashboard = () => {
+    const themeState = React.useContext(ThemeContext.State);
+    const [menuCollapse, setMenuCollapse] = useState(true)
+    const menuIconClick = () => {
+        menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
     };
 
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
-    };
-    render() {
-        return (
-            <div>
-                <Header />
-                <Navbar collapsed={this.state.collapsed} toggle={this.toggle} />
-                <div className='content d-flex'>
-                    <div className='top-gradient' />
-                    <Sidebar collapsed={this.state.collapsed} />
-                    <Home />
-                    <div className='bottom-gradient' />
-                </div>
-                <Footer />
-            </div >
-        )
-    }
+    return (
+        <div>
+            <Header />
+            <Navbar collapsed={menuCollapse} toggle={menuIconClick} />
+            <div className={`d-flex ${themeState.on ? 'light-content' : 'dark_content'}`}>
+                <div className='top-gradient' />
+                <div className="middle-gradient" />
+                <Sidebar collapsed={menuCollapse} />
+                <Home />
+                <div className='bottom-gradient' />
+            </div>
+            <Footer />
+        </div >
+    )
 }
 
 export default Dashboard;

@@ -1,46 +1,89 @@
-import React from 'react';
-import "antd/dist/antd.css";
-import '../assets/css/sidebar.css'
+import React, { useState } from "react";
 
-import { FaHome, FaTractor, FaExchangeAlt } from 'react-icons/fa'
-import Application from '../assets/img/application.svg'
+import {
+    ProSidebar,
+    Menu,
+    MenuItem,
+    SidebarContent,
+    SubMenu,
+} from "react-pro-sidebar";
+
+import { FaTractor, FaExchangeAlt, FaFacebook, FaPinterest, FaYoutubeSquare, FaInstagramSquare, FaRegSun } from "react-icons/fa";
+import { BiCategory, BiHome } from "react-icons/bi";
+
 import Inflatable from '../assets/img/inflatable.svg'
-import Exchange from '../assets/img/exchange.svg'
+import LightIcon from '../assets/img/icon_light.svg';
+import LightIconTop from '../assets/img/icon_light_top.svg';
+import DarkIcon from '../assets/img/icon_dark.svg';
+import DarkIconTop from '../assets/img/icon_dark_top.svg';
 
-import { Layout, Menu } from "antd";
-const { Sider } = Layout;
-const { SubMenu } = Menu;
+import "react-pro-sidebar/dist/css/styles.css";
+import '../assets/css/sidebar.css'
+import { ThemeContext } from "../contexts";
+
+//import sidebar css from react-pro-sidebar module and our custom css 
 
 const Sidebar = (props) => {
     const bg1 = '#E0B000'
     const bg2 = '#151C2F'
+    const themeDispatch = React.useContext(ThemeContext.Dispatch);
+    const themeState = React.useContext(ThemeContext.State);
 
+    const handleChangeThem = () => {
+        themeDispatch({type:'light'});
+    }
+    console.log(themeState.on)
     return (
-        <Sider trigger={null} collapsible collapsed={props.collapsed} className='sideMenu' collapsedWidth='68px' width='332px' style={{ backgroundColor: props.collapsed ? bg1 : bg2 }}>
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} style={{ backgroundColor: props.collapsed ? bg1 : bg2 }}>
-                <Menu.Item key="1" icon={<FaHome />}>
-                    Home
-                </Menu.Item>
-                <SubMenu key="sub1" icon={<img src={Exchange} />} title="Trade/Exchange">
-                    <Menu.Item key="2">Trade</Menu.Item>
-                    <Menu.Item key="3">Liquidity</Menu.Item>
-                </SubMenu>
-                <Menu.Item key="4" icon={<FaTractor />}>
-                    Farm
-                </Menu.Item>
-                <Menu.Item key="5" icon={<img src={Inflatable} />}>
-                    Pool
-                </Menu.Item>
-                <SubMenu key="sub2" icon={<img src={Application} />} title="More">
-                    <Menu.Item key="6">Moneydefi Website</Menu.Item>
-                    <Menu.Item key="7">Poocoin Chart</Menu.Item>
-                    <Menu.Item key="8">Token Contract Address</Menu.Item>
-                    <Menu.Item key="9">Product</Menu.Item>
-                    <Menu.Item key="10">Dex Tool</Menu.Item>
-                    <Menu.Item key="11">Audit</Menu.Item>
-                </SubMenu>
-            </Menu>
-        </Sider >
+        <div id="sidbar">
+            <ProSidebar collapsed={props.collapsed}>
+                <SidebarContent className={themeState.on ? props.collapsed ? 'light_background_close' : 'light_background_open' : props.collapsed ? 'dark_background_close' : 'dark_background_open'}>
+                    <Menu className={themeState.on ? 'light-text' : 'dark-text'} iconShape="square">
+                        <MenuItem active={true} icon={<BiHome />}>
+                            Home
+                        </MenuItem>
+                        <SubMenu icon={<FaExchangeAlt />} title='Trade/Exchange'>
+                            <MenuItem>Trade</MenuItem>
+                            <MenuItem>Liquidity</MenuItem>
+                        </SubMenu>
+                        <MenuItem icon={<FaTractor />}>
+                            Farm
+                        </MenuItem>
+                        <MenuItem icon={<img src={Inflatable} />}>
+                            Pool
+                        </MenuItem>
+                        <SubMenu icon={<BiCategory />} title='More'>
+                            <MenuItem>Moneydefi Website</MenuItem>
+                            <MenuItem>Poocoin Chart</MenuItem>
+                            <MenuItem>Token Contract Address</MenuItem>
+                            <MenuItem>Product</MenuItem>
+                            <MenuItem>Dex Tool</MenuItem>
+                            <MenuItem>Audit</MenuItem>
+                        </SubMenu>
+                    </Menu>
+                    <div className="justify-content-around others" style={{ display: props.collapsed ? 'none' : 'flex' }}>
+                        <div className="d-flex">
+                            <div className="toggleWrapper">
+                                <label className="switch">
+                                    <input type="checkbox" onChange={handleChangeThem}/>
+                                    <span className="slider round">
+                                        <img className="light-icon" src={LightIcon} />
+                                        /
+                                        <img className="dark-icon" src={DarkIcon} />
+                                    </span>
+                                </label>
+                            </div>
+                            <div><FaRegSun className="other-connect-icon" /></div>
+                        </div>
+                        <div className="d-flex other-connect">
+                            <a><FaFacebook className="other-connect-icon" /></a>
+                            <a><FaInstagramSquare className="other-connect-icon" /></a>
+                            <a><FaPinterest className="other-connect-icon" /></a>
+                            <a><FaYoutubeSquare className="other-connect-icon" /></a>
+                        </div>
+                    </div>
+                </SidebarContent>
+            </ProSidebar>
+        </div>
     )
 }
 

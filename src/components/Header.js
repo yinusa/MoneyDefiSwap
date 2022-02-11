@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
 import '../assets/css/header.css'
 import { FaTimes } from "react-icons/fa";
+import { ThemeContext } from '../contexts';
 
 const Header = () => {
+    const themeState = React.useContext(ThemeContext.State);
     const [worningTopic, setWorningTopic] = useState("PHISHING WARNING:");
     const [worningContent, setWorningContent] = useState("Please make sure you're visiting https://moneydefiswap.net/ - check the URL carefully.");
+    const [worningState, setWorningState] = useState(false);
 
-    console.log(worningTopic)
     return (
-        <div className="header d-flex justify-content-center">
+        <div className={`header justify-content-center ${themeState.on ? 'light_header' : 'dark_header'}`} style={{ display: worningState ? 'none' : 'flex' }}>
             <div className="worning-url d-flex justify-content-center align-self-center">
                 <span className="worning-topic align-self-center">{worningTopic}</span>
                 <span className="worning-content align-self-center">{worningContent}</span>
             </div>
             <FaTimes className='worning-cancel align-self-center' onClick={() => {
-                setWorningTopic("");
-                setWorningContent("");
+                setWorningState(true)
             }} />
         </div>
     )

@@ -1,10 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
 import Dashboard from './components/index'
+import {Store} from './contexts';
 
 function App() {
   return (
-    <Dashboard />
+    <Store>
+      <Dashboard />
+    </Store>
   );
 }
 
