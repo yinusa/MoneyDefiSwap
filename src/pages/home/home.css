@@ -1,10 +1,21 @@
+.home {
+  z-index: 1;
+}
+
 .home-font1 {
   font-family: Spicy Rice;
   font-style: normal;
   font-weight: normal;
   font-size: 70px;
   line-height: 80px;
+}
+
+.dark_home_font1 {
   color: #ffffff;
+}
+
+.light_home_font1 {
+  color: #001F65;
 }
 
 .home-font2 {
@@ -13,7 +24,14 @@
   font-weight: normal;
   font-size: 50px;
   line-height: 63px;
+}
+
+.dark_home_font2 {
   color: #ffffff;
+}
+
+.light_home_font2 {
+  color: #151C2F;
 }
 
 .home-font3 {
@@ -23,6 +41,14 @@
   font-size: 15px;
   line-height: 19px;
   color: #e0b000;
+}
+
+.dark_home_font3 {
+  color: #e0b000;
+}
+
+.light_home_font3 {
+  color: #151C2F;
 }
 
 .first-article img:first-child {
@@ -49,7 +75,6 @@
   margin-top: 15px;
   width: 238px;
   height: 58px;
-  background: #e0b000;
   border-radius: 12px;
   border: none;
 
@@ -58,7 +83,16 @@
   font-weight: bold;
   font-size: 22px;
   line-height: 26px;
+}
+
+.dark-btn-home-trade {
+  background: #e0b000;
   color: #000000;
+}
+
+.light-btn-home-trade {
+  background: #001F66;
+  color: #E0B000;
 }
 
 .second-article {
@@ -88,7 +122,6 @@
   width: auto;
   opacity: 0.55;
   width: inherit;
-  transform: rotateY(180deg);
 }
 
 .third-article {

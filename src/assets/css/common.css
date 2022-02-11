@@ -1,5 +1,10 @@
-.content {
+.dark_content {
   background-color: #151c2f;
+  position: relative;
+}
+
+.light-content {
+  background-color: #FFF4CA;
   position: relative;
 }
 
@@ -33,7 +38,7 @@
 .bottom-gradient {
   position: absolute;
   width: 100%;
-  height: 686px;
+  height: 704px;
   right: 0px;
   top: 1330px;
 
