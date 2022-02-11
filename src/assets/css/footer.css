@@ -1,10 +1,17 @@
 .footer {
-  background-color: #151c2f;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 2rem 4rem;
   color: white;
+}
+
+.dark_footer {
+  background-color: #151c2f;
+}
+
+.light_footer {
+  background-color: #E0B000;
 }
 
 .footer h4 {
@@ -48,6 +55,27 @@ p {
   color: #e0b000;
 }
 
+.light-custom-form {
+  background-color: transparent;
+  border: 1.5px solid #151C2F;
+  box-sizing: border-box;
+  border-radius: 12px;
+  color: #151C2F;
+  line-height: 2.3rem;
+  width: 100%;
+  padding: 0.2rem 1rem;
+}
+
+.light-custom-form :active,
+.light-custom-form:focus {
+  border: 0.5px solid #151C2F;
+  outline: none;
+}
+
+.light-custom-form::placeholder {
+  color: #151C2F;
+}
+
 .btn {
   cursor: pointer;
   padding: 0.3rem 2rem;
@@ -59,20 +87,40 @@ p {
 }
 
 .btn-subscribe {
-  background-color: #e0b000;
-  color: black;
+  
   font-size: 16px;
   margin-top: 0.5rem;
+}
+
+.dark-btn-subscribe {
+  background-color: #e0b000;
+  color: black;
+}
+
+.light-btn-subscribe {
+  background-color: #151C2F;
+  color: #E0B000;
 }
 
 .btn-subscribe:hover {
   background-color: #b89105;
 }
 
+.light-btn-subscribe:hover {
+  background-color: #151C2F;
+}
+
 .copyright {
-  background-color: #e0b000;
   padding: 0.7rem 4rem;
   width: 100%;
+}
+
+.dark-copyright {
+  background-color: #e0b000;
+}
+
+.light-copyright {
+  background-color: #151C2F;
 }
 
 .markName {

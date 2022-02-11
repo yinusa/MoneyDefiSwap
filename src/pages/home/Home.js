@@ -17,7 +17,7 @@ const Home = () => {
                 <div className="d-flex justify-content-end col-7"><img src={themeState.on ? Charactor2 : Charactor1}></img></div>
                 <div className="col-5">
                     <p className={`home-font1 first-article-topic ${themeState.on ? 'light_home_font1' : 'dark_home_font1'}`}>MoneyDefiSwap</p>
-                    <p className={`home-font2 first-article-explain ${themeState.on ? 'light_home_font2' : 'dark_home_font2'}`}>Together to the future with MoneydefiSwap $MSD> </p>
+                    <p className={`home-font2 first-article-explain ${themeState.on ? 'light_home_font2' : 'dark_home_font2'}`}>Together to the future with MoneydefiSwap $MSD&gt; </p>
                     <p className={`home-font3 first-article-content ${themeState.on ? 'light_home_font3' : 'dark_home_font3'}`}>$MSD also aims to bring businesses and developers together to solve real-world problems with the shared values of transparency, fee-less transaction, social and economic inclusion, environmental sustainability.</p>
                     <button className={`btn-home-trade ${themeState.on ? 'light-btn-home-trade' : 'dark-btn-home-trade'}`}>TRADE NOW</button>
                 </div>
