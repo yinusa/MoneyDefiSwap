@@ -65,6 +65,22 @@
   background-color: #151c2f;
 }
 
+#sidbar .pro-sidebar-inner .pro-sidebar-layout ul .pro-sub-menu li:nth-child(odd).active {
+  background-color: #151c2f;
+}
+
+#sidbar .pro-sidebar-inner .pro-sidebar-layout ul .pro-sub-menu li:nth-child(odd).active span{
+  color: #fff;
+}
+
+#sidbar .pro-sidebar-inner .pro-sidebar-layout ul .pro-sub-menu li:nth-child(even).active {
+  background-color: #151c2f;
+}
+
+#sidbar .pro-sidebar-inner .pro-sidebar-layout ul .pro-sub-menu li:nth-child(even).active span{
+  color: #fff;
+}
+
 .pro-sidebar .pro-menu {
   padding: 0;
 }

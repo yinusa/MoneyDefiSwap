@@ -23,7 +23,9 @@ import { ThemeContext } from "../contexts";
 
 //import sidebar css from react-pro-sidebar module and our custom css 
 
-const Sidebar = (props) => {
+const Sidebar = (props, history ) => {
+    const [sideStatus, setSideStatus] = React.useState([true, false, false, false, false])
+
     const bg1 = '#E0B000'
     const bg2 = '#151C2F'
     const themeDispatch = React.useContext(ThemeContext.Dispatch);
@@ -32,23 +34,37 @@ const Sidebar = (props) => {
     const handleChangeThem = () => {
         themeDispatch({type:'light'});
     }
-    console.log(themeState.on)
+    
+    const handleClickSidebar = (index) => {
+        let defaultValue = [false, false, false, false, false];
+        defaultValue[index] = true;
+        setSideStatus(defaultValue);
+        switch(index) {
+            case 0:
+                break;
+            case 1:
+                break;
+            default:
+                break;
+        }
+    }
+
     return (
         <div id="sidbar">
-            <ProSidebar collapsed={props.collapsed}>
+            <ProSidebar collapsed={props.collapsed} onToggle={(value)=>{console.log(value)}}>
                 <SidebarContent className={themeState.on ? props.collapsed ? 'light_background_close' : 'light_background_open' : props.collapsed ? 'dark_background_close' : 'dark_background_open'}>
                     <Menu className={themeState.on ? 'light-text' : 'dark-text'} iconShape="square">
-                        <MenuItem active={true} icon={<BiHome />}>
+                        <MenuItem active={sideStatus[0]} icon={<BiHome />} onClick={() => handleClickSidebar(0)}>
                             Home
                         </MenuItem>
                         <SubMenu icon={<FaExchangeAlt />} title='Trade/Exchange'>
-                            <MenuItem>Trade</MenuItem>
-                            <MenuItem>Liquidity</MenuItem>
+                            <MenuItem active={sideStatus[1]} onClick={() => handleClickSidebar(1)}>Trade</MenuItem>
+                            <MenuItem active={sideStatus[2]} onClick={() => handleClickSidebar(2)}>Liquidity</MenuItem>
                         </SubMenu>
-                        <MenuItem icon={<FaTractor />}>
+                        <MenuItem active={sideStatus[3]} icon={<FaTractor />} onClick={() => handleClickSidebar(3)}>
                             Farm
                         </MenuItem>
-                        <MenuItem icon={<img src={Inflatable} />}>
+                        <MenuItem active={sideStatus[4]} icon={<img src={Inflatable} />} onClick={() => handleClickSidebar(4)}>
                             Pool
                         </MenuItem>
                         <SubMenu icon={<BiCategory />} title='More'>
