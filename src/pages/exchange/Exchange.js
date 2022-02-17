@@ -26,7 +26,7 @@ const Exchange = () => {
             <div className="main-content">
                 <img className="image" src={themeState.on ? Charactor2 : Charactor1}></img>
                 <div className="main-area">
-                    {/* <ExchangeComponent /> */}
+                    <ExchangeComponent />
                 </div>
             </div>
         </div>

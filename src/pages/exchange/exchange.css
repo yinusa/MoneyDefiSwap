@@ -47,6 +47,7 @@
     background: #E0B000;
 }
 .image {
+    position: absolute;
     -moz-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
     -o-transform: scaleX(-1);
@@ -59,8 +60,8 @@
 }
 .main-area {
     width: 100%;
-    position: absolute;
-    top: 40px;
+    position: relative;
+    margin: 40px 0 80px;
     display: flex;
     justify-content: center;
 }
