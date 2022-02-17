@@ -40,8 +40,8 @@ const Dashboard = () => {
             <Navbar collapsed={menuCollapse} toggle={menuIconClick} />
             <div className={`d-flex ${themeState.on ? 'light-content' : 'dark_content'}`}>
                 
-                <Sidebar collapsed={menuCollapse} />
                 <Router>
+                    <Sidebar collapsed={menuCollapse} />
                     <ScreenList />
                 </Router>
                 
