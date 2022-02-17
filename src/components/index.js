@@ -17,7 +17,6 @@ import {
 const ScreenList = () => {
     let routes = useRoutes([
       { path: "/", element: <div>
-            <div className='top-gradient' />
             <div className="middle-gradient" />
             <Home />
             <div className='bottom-gradient' />
@@ -39,7 +38,7 @@ const Dashboard = () => {
             <Header />
             <Navbar collapsed={menuCollapse} toggle={menuIconClick} />
             <div className={`d-flex ${themeState.on ? 'light-content' : 'dark_content'}`}>
-                
+                <div className='top-gradient' />
                 <Router>
                     <Sidebar collapsed={menuCollapse} />
                     <ScreenList />
