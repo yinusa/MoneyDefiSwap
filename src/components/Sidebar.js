@@ -25,11 +25,24 @@ import { ThemeContext } from "../contexts";
 
 const Sidebar = (props) => {
     const [sideStatus, setSideStatus] = React.useState([true, false, false, false, false])
-
-    const bg1 = '#E0B000'
-    const bg2 = '#151C2F'
     const themeDispatch = React.useContext(ThemeContext.Dispatch);
     const themeState = React.useContext(ThemeContext.State);
+
+    React.useEffect(() => {
+        let value = [];
+        switch(window.location.pathname) {
+            case "/":
+                value = [true, false, false, false, false];
+                break;
+            case "/exchange":
+                value = [false, true, false, false, false];
+                break;
+            default:
+                value = [true, false, false, false, false];
+                break;
+        }
+        setSideStatus(value);
+    }, []);
 
     const handleChangeThem = () => {
         themeDispatch({type:'light'});
