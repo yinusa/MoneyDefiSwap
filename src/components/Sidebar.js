@@ -59,17 +59,17 @@ const Sidebar = (props) => {
             <ProSidebar collapsed={props.collapsed} onToggle={(value)=>{console.log(value)}}>
                 <SidebarContent className={themeState.on ? props.collapsed ? 'light_background_close' : 'light_background_open' : props.collapsed ? 'dark_background_close' : 'dark_background_open'}>
                     <Menu className={themeState.on ? 'light-text' : 'dark-text'} iconShape="square">
-                        <MenuItem active={sideStatus[0]} icon={<BiHome />} onClick={() => handleClickSidebar(0)}>
+                        <MenuItem className={!themeState.on && !props.collapsed && sideStatus[0] && "sidebar-option"} active={sideStatus[0]} icon={<BiHome />} onClick={() => handleClickSidebar(0)}>
                             <Link to="/">Home</Link>
                         </MenuItem>
                         <SubMenu icon={<FaExchangeAlt />} title='Trade/Exchange'>
-                            <MenuItem active={sideStatus[1]} onClick={() => handleClickSidebar(1)}><Link to="/exchange">Trade</Link></MenuItem>
-                            <MenuItem active={sideStatus[2]} onClick={() => handleClickSidebar(2)}>Liquidity</MenuItem>
+                            <MenuItem className={!themeState.on && !props.collapsed && sideStatus[1] && "sidebar-option"} active={sideStatus[1]} onClick={() => handleClickSidebar(1)}><Link to="/exchange">Trade</Link></MenuItem>
+                            <MenuItem className={!themeState.on && !props.collapsed && sideStatus[2] && "sidebar-option"} active={sideStatus[2]} onClick={() => handleClickSidebar(2)}>Liquidity</MenuItem>
                         </SubMenu>
-                        <MenuItem active={sideStatus[3]} icon={<FaTractor />} onClick={() => handleClickSidebar(3)}>
+                        <MenuItem className={!themeState.on && !props.collapsed && sideStatus[3] && "sidebar-option"} active={sideStatus[3]} icon={<FaTractor />} onClick={() => handleClickSidebar(3)}>
                             Farm
                         </MenuItem>
-                        <MenuItem active={sideStatus[4]} icon={<img src={Inflatable} />} onClick={() => handleClickSidebar(4)}>
+                        <MenuItem className={!themeState.on && !props.collapsed && sideStatus[4] && "sidebar-option"} active={sideStatus[4]} icon={<img src={Inflatable} />} onClick={() => handleClickSidebar(4)}>
                             Pool
                         </MenuItem>
                         <SubMenu icon={<BiCategory />} title='More'>

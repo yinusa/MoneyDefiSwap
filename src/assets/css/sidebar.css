@@ -61,6 +61,7 @@
   .pro-item-content {
   color: #fff;
 }
+
 #sidbar .pro-sidebar-inner .pro-sidebar-layout .active {
   background-color: #151c2f;
 }
@@ -80,7 +81,9 @@
 #sidbar .pro-sidebar-inner .pro-sidebar-layout ul .pro-sub-menu li:nth-child(even).active span{
   color: #fff;
 }
-
+.sidebar-option {
+  background-color: #FFF4CA !important;
+}
 .pro-sidebar .pro-menu {
   padding: 0;
 }
