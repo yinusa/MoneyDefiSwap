@@ -10,6 +10,11 @@ import {VscArrowSwap} from "react-icons/vsc";
 const ExchangeComponent = () => {
   const themeState = React.useContext(ThemeContext.State);
   const [showGraphics, setShowGraphics] = React.useState(false);
+  const [selectedDuration, setSelectedDuration] = React.useState(0);
+
+  const handleClickDuration = index => {
+    setSelectedDuration(index);
+  }
 
   return (
     <div className="exchange-main">
@@ -19,7 +24,25 @@ const ExchangeComponent = () => {
           <MdKeyboardArrowLeft className={`exchange-graphics-arrow-icon ${themeState.on ? "exchange-graphics-arrow-icon-light" : "exchange-graphics-arrow-icon-dark"}`} onClick={() => {setShowGraphics(!showGraphics)}}/>}
           <div className={showGraphics ? "exchange-graphics-div-open" : "exchange-graphics-div-hide"}>
             <div className={`exchange-graphics-content ${themeState.on ? "exchange-graphics-content-light" : "exchange-graphics-content-dark"}`}>
-
+              <div className="exchange-graphics-header">
+                <span className="exchange-graphics-coins">BNB / BNB</span>
+                <span className="exchange-graphics-basic-view">BASIC VIEW</span>
+                <span className="exchange-graphics-trading-view">TRADING VIEW</span>
+              </div>
+              <span className="exchange-graphics-current-time">Feb 03-2022, 11:39 PM</span>
+              <div className="exchange-graphics-control-area">
+                <div>
+                  <span className="exchange-graphics-ratio">64.58</span>
+                  <span className="exchange-graphics-coins1">BNB / BNB</span>
+                  <span className="exchange-graphics-percent">+0.296 (0.58%)</span>
+                </div>
+                <div className="exchange-graphics-control">
+                  <span className={`exchange-graphics-select-24h ${themeState.on? selectedDuration == 0 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 0 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(0)}>24H</span>
+                  <span className={`exchange-graphics-select-1w ${themeState.on? selectedDuration == 1 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 1 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(1)}>1W</span>
+                  <span className={`exchange-graphics-select-1m ${themeState.on? selectedDuration == 2 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 2 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(2)}>1M</span>
+                  <span className={`exchange-graphics-select-1y ${themeState.on? selectedDuration == 3 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 3 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(3)}>1Y</span>
+                </div>
+              </div>
             </div>
           </div>
           
