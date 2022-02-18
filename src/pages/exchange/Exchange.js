@@ -18,9 +18,9 @@ const Exchange = () => {
         <div className="exchange">
             <div className="tab-content">
                 <div className="tab-area">
-                    <span className={`tab-button  tab-exchange ${selectTab==0 ? 'tab-button-color-select' : 'tab-button-color'}`} onClick={() => handleClickTab(0)}>Exchange</span>
-                    <span className={`tab-button tab-trade ${selectTab==1 ? 'tab-button-color-select' : 'tab-button-color'}`} onClick={() => handleClickTab(1)}>Trade</span>
-                    <span className={`tab-button tab-liquidity ${selectTab==2 ? 'tab-button-color-select' : 'tab-button-color'}`} onClick={() => handleClickTab(2)}>Liquidity</span>
+                    <span className={`tab-button  tab-exchange ${selectTab==0 ? themeState.on ? 'tab-button-color' : 'tab-button-color-select' :  themeState.on ? 'tab-button-color-select' : 'tab-button-color'}`} onClick={() => handleClickTab(0)}>Exchange</span>
+                    <span className={`tab-button ${themeState.on ? "tab-trade-light" : "tab-trade-dark"} ${selectTab==1 ? themeState.on ? 'tab-button-color' : 'tab-button-color-select' :  themeState.on ? 'tab-button-color-select' : 'tab-button-color'}`} onClick={() => handleClickTab(1)}>Trade</span>
+                    <span className={`tab-button tab-liquidity ${selectTab==2 ? themeState.on ? 'tab-button-color' : 'tab-button-color-select' :  themeState.on ? 'tab-button-color-select' : 'tab-button-color'}`} onClick={() => handleClickTab(2)}>Liquidity</span>
                 </div>
             </div>
             <div className="main-content">

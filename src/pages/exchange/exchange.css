@@ -33,9 +33,14 @@
 .tab-liquidity {
     border-radius: 0px 20px 20px 0px;
 }
-.tab-trade {
+.tab-trade-dark {
     border-width: 0px 1px;
     border-color: #E0B000;
+    border-style: solid;
+}
+.tab-trade-light {
+    border-width: 0px 1px;
+    border-color: #151C2F;
     border-style: solid;
 }
 .tab-button-color {
