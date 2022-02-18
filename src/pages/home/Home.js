@@ -8,7 +8,7 @@ import Money from '../../assets/img/money.svg'
 import './home.css'
 import { ThemeContext } from '../../contexts';
 
-const Home = () => {
+const Home = (props) => {
     const themeState = React.useContext(ThemeContext.State);
 
     return (

@@ -1,0 +1,72 @@
+.exchange {
+    width: 100%;
+    position: relative;
+}
+.tab-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+.tab-area {
+    display: inline-flex;
+}
+.tab-button {
+    width: 192px;
+    height: 63px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: Roboto;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: center;
+    text-transform: uppercase;
+}
+.tab-exchange {
+    border-radius: 20px 0px 0px 20px;
+}
+.tab-liquidity {
+    border-radius: 0px 20px 20px 0px;
+}
+.tab-trade-dark {
+    border-width: 0px 1px;
+    border-color: #E0B000;
+    border-style: solid;
+}
+.tab-trade-light {
+    border-width: 0px 1px;
+    border-color: #151C2F;
+    border-style: solid;
+}
+.tab-button-color {
+    color: #E0B000;
+    background: #151C2F;
+}
+.tab-button-color-select {
+    color: #151C2F;
+    background: #E0B000;
+}
+.image {
+    position: absolute;
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: fliph;
+    filter: fliph;
+}
+.main-content {
+    position: relative;
+}
+.main-area {
+    width: 100%;
+    position: relative;
+    margin: 40px 0 80px;
+    display: flex;
+    justify-content: center;
+}
