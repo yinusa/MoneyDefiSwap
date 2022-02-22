@@ -7,6 +7,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "
 import {AiOutlineReload} from "react-icons/ai";
 import {VscArrowSwap} from "react-icons/vsc";
 import TokenInsertModal from "./TokenInsertModal";
+import ReactApexChart from 'react-apexcharts';
 
 const ExchangeComponent = () => {
   const themeState = React.useContext(ThemeContext.State);
@@ -30,6 +31,59 @@ const ExchangeComponent = () => {
 
   const [swapToken, setSwapToken] = React.useState(listToken[0]);
   const [purposeToken, setPurposeToken] = React.useState(listToken[1]);
+
+  const [chartsSeries, setChartSeries] = React.useState([
+    {
+      data: [11, 32, 45, 32, 34, 52, 41]
+    }
+  ])
+
+  const [chartOptionLight, setChartOptionLight] = React.useState({
+    colors : ['#151C2F'],
+    chart: {
+      height: 400,
+      type: 'area',
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'smooth'
+    },
+    xaxis: {
+      type: 'datetime',
+      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+    },
+    tooltip: {
+      x: {
+        format: 'dd/MM/yy HH:mm'
+      },
+    },
+    
+  })
+
+  const [chartOptionDark, setChartOptionDark] = React.useState({
+    colors : ['#E0B000'],
+    chart: {
+      height: 400,
+      type: 'area',
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      curve: 'smooth'
+    },
+    xaxis: {
+      type: 'datetime',
+      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+    },
+    tooltip: {
+      x: {
+        format: 'dd/MM/yy HH:mm'
+      },
+    },
+  })
 
   const handleClickDuration = index => {
     setSelectedDuration(index);
@@ -79,6 +133,9 @@ const ExchangeComponent = () => {
                   <span className={`exchange-graphics-select-1m ${themeState.on? selectedDuration == 2 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 2 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(2)}>1M</span>
                   <span className={`exchange-graphics-select-1y ${themeState.on? selectedDuration == 3 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 3 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(3)}>1Y</span>
                 </div>
+              </div>
+              <div className='exchange-graphics-view-area'>
+                <ReactApexChart className="exchange-graphics" options={themeState.on ? chartOptionLight : chartOptionDark} series={chartsSeries} type="area" height={350} />
               </div>
             </div>
           </div>

@@ -357,3 +357,9 @@
   color: #E0B000;
   background: #151C2F;
 }
+.exchange-graphics-view-area {
+  margin-top: 30px;
+}
+.exchange-graphics .apexcharts-toolbar {
+  z-index: 0;
+}
