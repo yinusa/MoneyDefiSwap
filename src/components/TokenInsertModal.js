@@ -36,7 +36,7 @@ const TokenInsertModal = (props) => {
     <Modal
       isOpen={props.isOpen}
       onAfterOpen={afterOpenModal}
-      onRequestClose={handleClose}
+      onRequestClose={() => handleClose(0)}
       style={customStyles}
       contentLabel="Example Modal"
       ariaHideApp={false}
