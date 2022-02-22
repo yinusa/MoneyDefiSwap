@@ -6,18 +6,55 @@ import BNB from '../assets/img/icon-bnb.svg'
 import { MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import {AiOutlineReload} from "react-icons/ai";
 import {VscArrowSwap} from "react-icons/vsc";
+import TokenInsertModal from "./TokenInsertModal";
 
 const ExchangeComponent = () => {
   const themeState = React.useContext(ThemeContext.State);
   const [showGraphics, setShowGraphics] = React.useState(false);
   const [selectedDuration, setSelectedDuration] = React.useState(0);
+  const [openSwapCoin, setOpenSwapCoin] = React.useState(false);
+  const [openPurposeCoin, setOpenPurposeCoin] = React.useState(false);
+  const [listToken, setListToken] = React.useState([
+    {name: 'Bitcoin', symbol: 'BTC', balance: 10},
+    {name: 'Ethereum', symbol: 'ETH', balance: 11},
+    {name: 'Tether', symbol: 'USDT', balance: 14},
+    {name: 'BNB', symbol: 'BNB', balance: 15.2},
+    {name: 'XRP', symbol: 'XRP', balance: 1.3},
+    {name: 'Solana', symbol: 'SOL', balance: 13.5},
+    {name: 'Terra', symbol: 'LUNA', balance: 0},
+    {name: 'Avalanche', symbol: 'AVAX', balance: 13.2},
+    {name: 'Dogecoin', symbol: 'DOGE', balance: 12.6},
+    {name: 'Polkadot', symbol: 'DOT', balance: 1.2},
+    {name: 'Polygon', symbol: 'MATIC', balance: 1.7},
+  ])
+
+  const [swapToken, setSwapToken] = React.useState(listToken[0]);
+  const [purposeToken, setPurposeToken] = React.useState(listToken[1]);
 
   const handleClickDuration = index => {
     setSelectedDuration(index);
   }
 
+  const handleCloseSwapCoinModal = (index) => {
+    setOpenSwapCoin(false);
+    setSwapToken(listToken[index]);
+  }
+
+  const handleClosePurposeModal = (index) => {
+    setOpenPurposeCoin(false);
+    setPurposeToken(listToken[index]);
+  }
+
+  const handleChangeTokens = () => {
+    const token = swapToken;
+    setSwapToken(purposeToken);
+    setPurposeToken(token);
+  }
+
   return (
     <div className="exchange-main">
+      <TokenInsertModal listToken={listToken} isOpen={openSwapCoin} closeModal={handleCloseSwapCoinModal} />
+      <TokenInsertModal listToken={listToken} isOpen={openPurposeCoin} closeModal={handleClosePurposeModal} />
       <div className={`exchange-graphics-area  ${themeState.on ? "exchange-graphics-area-light" : "exchange-graphics-area-dark" } ${showGraphics? "exchange-graphics-area-open" : "exchange-graphics-area-close"}`}>
         {showGraphics ?
           <MdKeyboardArrowRight className={`exchange-graphics-arrow-icon ${themeState.on ? "exchange-graphics-arrow-icon-light" : "exchange-graphics-arrow-icon-dark"}`} onClick={() => {setShowGraphics(!showGraphics)}}/> :
@@ -25,7 +62,7 @@ const ExchangeComponent = () => {
           <div className={showGraphics ? "exchange-graphics-div-open" : "exchange-graphics-div-hide"}>
             <div className={`exchange-graphics-content ${themeState.on ? "exchange-graphics-content-light" : "exchange-graphics-content-dark"}`}>
               <div className="exchange-graphics-header">
-                <span className="exchange-graphics-coins">BNB / BNB</span>
+                <span className="exchange-graphics-coins">{swapToken.symbol} / {purposeToken.symbol}</span>
                 <span className="exchange-graphics-basic-view">BASIC VIEW</span>
                 <span className="exchange-graphics-trading-view">TRADING VIEW</span>
               </div>
@@ -33,7 +70,7 @@ const ExchangeComponent = () => {
               <div className="exchange-graphics-control-area">
                 <div>
                   <span className="exchange-graphics-ratio">64.58</span>
-                  <span className="exchange-graphics-coins1">BNB / BNB</span>
+                  <span className="exchange-graphics-coins1">{swapToken.symbol} / {purposeToken.symbol}</span>
                   <span className="exchange-graphics-percent">+0.296 (0.58%)</span>
                 </div>
                 <div className="exchange-graphics-control">
@@ -55,9 +92,9 @@ const ExchangeComponent = () => {
         <div className={`exchange-body ${themeState.on ? "exchange-text-light" : "exchange-text-dark"}`}>
           <div className="exchange-select-part">
             <div className="exchange-type-area">
-              <div className="exchange-type-select">
+              <div className="exchange-type-select" onClick={()=>setOpenSwapCoin(true)}>
                 <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB} />
-                <span className="blockchain-name">BNB</span>
+                <span className="blockchain-name">{swapToken.symbol}</span>
                 <MdKeyboardArrowDown className="arrow-down-icon" />
               </div>
               <div className="blockchain-balance">
@@ -70,12 +107,12 @@ const ExchangeComponent = () => {
               <input className="exchange-input " placeholder="0.0"/>
             </div>
           </div>
-          <VscArrowSwap className="btn-swap" />
+          <VscArrowSwap className="btn-swap" onClick={handleChangeTokens} />
           <div className="exchange-select-part">
             <div className="exchange-type-area">
-              <div className="exchange-type-select">
+              <div className="exchange-type-select" onClick={()=>setOpenPurposeCoin(true)}>
                 <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB} src={BNB} />
-                <span className="blockchain-name">BNB</span>
+                <span className="blockchain-name">{purposeToken.symbol}</span>
                 <MdKeyboardArrowDown className="arrow-down-icon" />
               </div>
               <div className="blockchain-balance">
@@ -91,9 +128,9 @@ const ExchangeComponent = () => {
           <div className="exchange-ratio">
             <span>Price </span>
             <span>0.019616</span>
-            <span> BNB </span>
+            <span> {purposeToken.symbol} </span>
             <span> per </span>
-            <span>CAKE</span>
+            <span>{swapToken.symbol}</span>
             <AiOutlineReload className="exchange-reload"/>
           </div>
           <button className={`exchange-connect-wallet ${themeState.on ? "exchange-connect-wallet-light" : "exchange-connect-wallet-dark"}`} >CONNECT WALLET</button>
