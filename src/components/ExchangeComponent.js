@@ -4,8 +4,8 @@ import { ThemeContext } from '../contexts';
 import '../assets/css/exchangecomponent.css'
 import BNB from '../assets/img/icon-bnb.svg'
 import { MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import {AiOutlineReload} from "react-icons/ai";
-import {VscArrowSwap} from "react-icons/vsc";
+import { AiOutlineReload } from "react-icons/ai";
+import { VscArrowSwap } from "react-icons/vsc";
 import TokenInsertModal from "./TokenInsertModal";
 import ReactApexChart from 'react-apexcharts';
 import { ethers } from "ethers";
@@ -15,7 +15,8 @@ import { formatUnits, parseUnits } from "ethers/lib/utils";
 import Router from '../contracts/UniswapV2Router02.sol/UniswapV2Router02.json';
 import { address } from "../constants/addresses";
 
-const ExchangeComponent = ({account, requestAccount, tokens}) => {
+const ExchangeComponent = ({ account, requestAccount, tokens }) => {
+  const [rate, setRate] = React.useState(1);
   const [amountIn, setAmountIn] = React.useState(0);
   const [amountOut, setAmountOut] = React.useState(0);
   const themeState = React.useContext(ThemeContext.State);
@@ -24,8 +25,9 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
   const [openSwapCoin, setOpenSwapCoin] = React.useState(false);
   const [openPurposeCoin, setOpenPurposeCoin] = React.useState(false);
   const [listToken, setListToken] = React.useState([
-    {name: 'Bitcoin', symbol: 'BTC', balance: 0},
-    {name: 'Ethereum', symbol: 'ETH', balance: 0},
+    { name: 'Token2', symbol: 'T2', balance: '0.0', decimals: 18, address: '0x4E2dA4fAD7C15eB60BEaF8A3C9f496a25DB67bC1' },
+    { name: 'Token1', symbol: 'T1', balance: '0.0', decimals: 18, address: '0xAD11DF3a7ee05920C6E016Ac571b64C29125aB46' },
+    { name: 'WETH', symbol: 'ETH', balance: '0.0', decimals: 18, address: '0xA8F92827e0905017eE68Ddc7e6Bf35B5CfEf5A13' }
   ])
 
   const [swapToken, setSwapToken] = React.useState(listToken[0]);
@@ -33,12 +35,12 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
 
   const [chartsSeries, setChartSeries] = React.useState([
     {
-      data: [11, 32, 45, 32, 34, 52, 41]
+      data: [1]
     }
   ])
 
   const [chartOptionLight, setChartOptionLight] = React.useState({
-    colors : ['#151C2F'],
+    colors: ['#151C2F'],
     chart: {
       height: 400,
       type: 'area',
@@ -58,11 +60,11 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
         format: 'dd/MM/yy HH:mm'
       },
     },
-    
+
   })
 
   const [chartOptionDark, setChartOptionDark] = React.useState({
-    colors : ['#E0B000'],
+    colors: ['#E0B000'],
     chart: {
       height: 400,
       type: 'area',
@@ -89,10 +91,10 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
     async function getBalance() {
       let balance = 0;
       let tokenList = [];
-      for(let i = 0; i < tokens.length; i++) {
+      for (let i = 0; i < tokens.length; i++) {
         const provider = new ethers.providers.JsonRpcProvider(network.rpcUrls[0]);
         const contract = new ethers.Contract(tokens[i].address, ERC20.abi, provider);
-        if(!account) {
+        if (!account) {
           balance = 0;
         } else {
           try {
@@ -100,7 +102,7 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
           } catch (err) {
             throw err;
           }
-        }        
+        }
         tokenList.push({
           name: tokens[i].name,
           symbol: tokens[i].symbol,
@@ -109,21 +111,26 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
           address: tokens[i].address
         });
       }
-      
-      setListToken(tokenList);
+
+      tokenList.length != 0 && setListToken(tokenList);
     }
     getBalance();
-  },[account, tokens]);
+  }, [account, tokens]);
   // calculate amountOut
   useEffect(() => {
     async function getAmountOut() {
+      setChartSeries([
+        {
+          data: [1]
+        }
+      ]);
       try {
         const provider = new ethers.providers.JsonRpcBatchProvider(network.rpcUrls[0]);
         const contract = new ethers.Contract(address['router'], Router.abi, provider);
         const path = [swapToken.address, purposeToken.address];
         const amounts = await contract.getAmountsOut(parseUnits(String(amountIn), swapToken.decimals), path);
         setAmountOut(formatUnits(amounts[1], purposeToken.decimals));
-      } catch(err) {
+      } catch (err) {
         throw err;
       }
     }
@@ -131,8 +138,8 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
   }, [amountIn, purposeToken, swapToken]);
 
   // swap , request account
-  const swapTokens = async() => {
-    if(!account) {
+  const swapTokens = async () => {
+    if (!account) {
       requestAccount();
     } else {
       // approve
@@ -154,10 +161,47 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
           deadline
         );
         await tx.wait();
-        console.log("swaped");
+
+        setAmountIn(0);
+        setAmountOut(0);
       });
     }
   }
+  // chart
+  useEffect(() => {
+    async function getAmountOut() {
+      try {
+        const provider = new ethers.providers.JsonRpcBatchProvider(network.rpcUrls[0]);
+        const contract = new ethers.Contract(address['router'], Router.abi, provider);
+        const path = [swapToken.address, purposeToken.address];
+        const amounts = await contract.getAmountsOut(parseUnits(String("1"), swapToken.decimals), path);
+        let cut_data = (amounts[1]/amounts[0]).toFixed(2);
+        setRate(cut_data);
+        let data = chartsSeries[0].data;
+        data.push(amounts[1]/amounts[0]);
+        setChartSeries([
+          {
+            data: data
+          }
+        ]);
+      } catch (err) {
+        throw err;
+      }
+    }
+    const timer = setInterval(() => {
+      getAmountOut();
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    }
+  }, []);
+
+  useEffect(() => {
+    if(listToken[0] && listToken[1]) {
+      setSwapToken(listToken[0]);
+      setPurposeToken(listToken[1]);
+    }
+  }, [listToken]);
 
   const setAmountInByMax = () => {
     setAmountIn(swapToken.balance);
@@ -168,13 +212,14 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
   }
 
   const handleCloseSwapCoinModal = (index) => {
+
     setOpenSwapCoin(false);
-    setSwapToken(listToken[index]);
+    setSwapToken(listToken[index==0 ? 0 : index - 1]);
   }
 
   const handleClosePurposeModal = (index) => {
     setOpenPurposeCoin(false);
-    setPurposeToken(listToken[index]);
+    setPurposeToken(listToken[index == 0 ? 1 : index-1]);
   }
 
   const handleChangeTokens = () => {
@@ -185,39 +230,39 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
 
   return (
     <div className="exchange-main">
-      <TokenInsertModal listToken={listToken} isOpen={openSwapCoin} closeModal={handleCloseSwapCoinModal} />
-      <TokenInsertModal listToken={listToken} isOpen={openPurposeCoin} closeModal={handleClosePurposeModal} />
-      <div className={`exchange-graphics-area  ${themeState.on ? "exchange-graphics-area-light" : "exchange-graphics-area-dark" } ${showGraphics? "exchange-graphics-area-open" : "exchange-graphics-area-close"}`}>
+      <TokenInsertModal listToken={listToken} disableToken={purposeToken} isOpen={openSwapCoin} closeModal={handleCloseSwapCoinModal} />
+      <TokenInsertModal listToken={listToken} disableToken={swapToken} isOpen={openPurposeCoin} closeModal={handleClosePurposeModal} />
+      <div className={`exchange-graphics-area  ${themeState.on ? "exchange-graphics-area-light" : "exchange-graphics-area-dark"} ${showGraphics ? "exchange-graphics-area-open" : "exchange-graphics-area-close"}`}>
         {showGraphics ?
-          <MdKeyboardArrowRight className={`exchange-graphics-arrow-icon ${themeState.on ? "exchange-graphics-arrow-icon-light" : "exchange-graphics-arrow-icon-dark"}`} onClick={() => {setShowGraphics(!showGraphics)}}/> :
-          <MdKeyboardArrowLeft className={`exchange-graphics-arrow-icon ${themeState.on ? "exchange-graphics-arrow-icon-light" : "exchange-graphics-arrow-icon-dark"}`} onClick={() => {setShowGraphics(!showGraphics)}}/>}
-          <div className={showGraphics ? "exchange-graphics-div-open" : "exchange-graphics-div-hide"}>
-            <div className={`exchange-graphics-content ${themeState.on ? "exchange-graphics-content-light" : "exchange-graphics-content-dark"}`}>
-              <div className="exchange-graphics-header">
-                <span className="exchange-graphics-coins">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
-                <span className="exchange-graphics-basic-view">BASIC VIEW</span>
-                <span className="exchange-graphics-trading-view">TRADING VIEW</span>
+          <MdKeyboardArrowRight className={`exchange-graphics-arrow-icon ${themeState.on ? "exchange-graphics-arrow-icon-light" : "exchange-graphics-arrow-icon-dark"}`} onClick={() => { setShowGraphics(!showGraphics) }} /> :
+          <MdKeyboardArrowLeft className={`exchange-graphics-arrow-icon ${themeState.on ? "exchange-graphics-arrow-icon-light" : "exchange-graphics-arrow-icon-dark"}`} onClick={() => { setShowGraphics(!showGraphics) }} />}
+        <div className={showGraphics ? "exchange-graphics-div-open" : "exchange-graphics-div-hide"}>
+          <div className={`exchange-graphics-content ${themeState.on ? "exchange-graphics-content-light" : "exchange-graphics-content-dark"}`}>
+            <div className="exchange-graphics-header">
+              <span className="exchange-graphics-coins">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
+              <span className="exchange-graphics-basic-view">BASIC VIEW</span>
+              <span className="exchange-graphics-trading-view">TRADING VIEW</span>
+            </div>
+            <span className="exchange-graphics-current-time">Feb 03-2022, 11:39 PM</span>
+            <div className="exchange-graphics-control-area">
+              <div>
+                <span className="exchange-graphics-ratio">{rate}</span>
+                <span className="exchange-graphics-coins1">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
+                <span className="exchange-graphics-percent">+0.296 (0.58%)</span>
               </div>
-              <span className="exchange-graphics-current-time">Feb 03-2022, 11:39 PM</span>
-              <div className="exchange-graphics-control-area">
-                <div>
-                  <span className="exchange-graphics-ratio">64.58</span>
-                  <span className="exchange-graphics-coins1">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
-                  <span className="exchange-graphics-percent">+0.296 (0.58%)</span>
-                </div>
-                <div className="exchange-graphics-control">
-                  <span className={`exchange-graphics-select-24h ${themeState.on? selectedDuration == 0 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 0 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(0)}>24H</span>
-                  <span className={`exchange-graphics-select-1w ${themeState.on? selectedDuration == 1 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 1 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(1)}>1W</span>
-                  <span className={`exchange-graphics-select-1m ${themeState.on? selectedDuration == 2 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 2 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(2)}>1M</span>
-                  <span className={`exchange-graphics-select-1y ${themeState.on? selectedDuration == 3 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 3 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={()=>handleClickDuration(3)}>1Y</span>
-                </div>
-              </div>
-              <div className='exchange-graphics-view-area'>
-                <ReactApexChart className="exchange-graphics" options={themeState.on ? chartOptionLight : chartOptionDark} series={chartsSeries} type="area" height={350} />
+              <div className="exchange-graphics-control">
+                <span className={`exchange-graphics-select-24h ${themeState.on ? selectedDuration == 0 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 0 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={() => handleClickDuration(0)}>24H</span>
+                <span className={`exchange-graphics-select-1w ${themeState.on ? selectedDuration == 1 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 1 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={() => handleClickDuration(1)}>1W</span>
+                <span className={`exchange-graphics-select-1m ${themeState.on ? selectedDuration == 2 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 2 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={() => handleClickDuration(2)}>1M</span>
+                <span className={`exchange-graphics-select-1y ${themeState.on ? selectedDuration == 3 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 3 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={() => handleClickDuration(3)}>1Y</span>
               </div>
             </div>
+            <div className='exchange-graphics-view-area'>
+              <ReactApexChart className="exchange-graphics" options={themeState.on ? chartOptionLight : chartOptionDark} series={chartsSeries} type="area" height={350} />
+            </div>
           </div>
-          
+        </div>
+
       </div>
       <div className={`exchange-container ${themeState.on ? "exchange-container-light" : "exchange-container-dark"}`}>
         <div className={`exchange-header ${themeState.on ? "exchange-header-light" : "exchange-header-dark"}`}>
@@ -227,62 +272,62 @@ const ExchangeComponent = ({account, requestAccount, tokens}) => {
         <div className={`exchange-body ${themeState.on ? "exchange-text-light" : "exchange-text-dark"}`}>
           <div className="exchange-select-part">
             <div className="exchange-type-area">
-              <div className="exchange-type-select" onClick={()=>setOpenSwapCoin(true)}>
+              <div className="exchange-type-select" onClick={() => setOpenSwapCoin(true)}>
                 <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB} />
                 <span className="blockchain-name">{swapToken ? swapToken.symbol : "BTC"}</span>
                 <MdKeyboardArrowDown className="arrow-down-icon" />
               </div>
               <div className="blockchain-balance">
                 <span>Available:</span>
-                <span>{swapToken ? swapToken.balance : 0}</span>
+                <span>{swapToken ? Number(swapToken.balance).toFixed(2) : 0}</span>
               </div>
             </div>
             <div className="exchange-input-area">
               <button onClick={setAmountInByMax} className="btn-max">MAX</button>
-              <input value={amountIn} onChange={e => setAmountIn(e.target.value)} className="exchange-input " placeholder="0.0"/>
+              <input value={amountIn} onChange={e => setAmountIn(e.target.value)} className="exchange-input " placeholder="0.0" />
             </div>
           </div>
           <VscArrowSwap className="btn-swap" onClick={handleChangeTokens} />
           <div className="exchange-select-part">
             <div className="exchange-type-area">
-              <div className="exchange-type-select" onClick={()=>setOpenPurposeCoin(true)}>
+              <div className="exchange-type-select" onClick={() => setOpenPurposeCoin(true)}>
                 <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB} src={BNB} />
                 <span className="blockchain-name">{purposeToken ? purposeToken.symbol : "ETH"}</span>
                 <MdKeyboardArrowDown className="arrow-down-icon" />
               </div>
               <div className="blockchain-balance">
                 <span>Available:</span>
-                <span>{purposeToken ? purposeToken.balance : 0 }</span>
+                <span>{purposeToken ? Number(purposeToken.balance).toFixed(2) : 0}</span>
               </div>
             </div>
             <div className="exchange-input-area">
               <button className="btn-max">MAX</button>
-              <input value={amountOut} onChange={e => setAmountOut(e.target.value)} className="exchange-input " placeholder="0.0"/>
+              <input value={amountOut} onChange={e => setAmountOut(e.target.value)} className="exchange-input " placeholder="0.0" />
             </div>
           </div>
           {purposeToken && swapToken ?
-          <div className="exchange-ratio">
-            <span>Price </span>
-            <span>0.019616</span>
-            <span> {purposeToken.symbol} </span>
-            <span> per </span>
-            <span>{swapToken.symbol}</span>
-            <AiOutlineReload className="exchange-reload"/>
-          </div> : ""
+            <div className="exchange-ratio">
+              <span>Price </span>
+              <span>{ `${rate}` }</span>
+              <span> {purposeToken.symbol} </span>
+              <span> per </span>
+              <span>{swapToken.symbol}</span>
+              <AiOutlineReload className="exchange-reload" />
+            </div> : ""
           }
           <button onClick={swapTokens} className={`exchange-connect-wallet ${themeState.on ? "exchange-connect-wallet-light" : "exchange-connect-wallet-dark"}`} >
             {
               !account ? (
                 <div>CONNECT WALLET</div>
-              ): (
+              ) : (
                 <div>Swap</div>
               )
             }
-            
+
           </button>
         </div>
       </div>
-      
+
     </div>
   )
 }
