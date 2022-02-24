@@ -50,7 +50,8 @@ const TokenInsertModal = (props) => {
         <input className='modal-token-insert' placeholder='Search name or paste address' />
         <div className='modal-token-list'>
           {props.listToken.map((cell, index) => {
-            return(<div key={index} className='modal-cell-main' onClick={() =>handleClose(index)}>
+            if(cell && cell.symbol && props.disableToken && props.disableToken.symbol) {
+              return(<div key={index} className={`modal-cell-main ${cell.symbol == props.disableToken.symbol && 'disable-color'}`} onClick={cell.symbol != props.disableToken.symbol ? () =>handleClose(index+1) : null}>
               <img src={BNB} />
               <div className='modal-cell-type'>
                 <div className='modal-cell-symbol'>{cell.symbol}</div>
@@ -58,6 +59,8 @@ const TokenInsertModal = (props) => {
               </div>
               <div className='modal-cell-balance'>{cell.balance}</div>
             </div>);
+            }
+            
           })}
         </div>
       </div>

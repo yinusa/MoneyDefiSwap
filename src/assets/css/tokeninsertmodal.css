@@ -41,6 +41,9 @@
   font-size: 18px;
   font-weight: bold;
 }
+.disable-color {
+  color: #ffffff33;
+}
 ::-webkit-scrollbar {
   width: 10px;
 }
