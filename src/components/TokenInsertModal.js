@@ -18,6 +18,7 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     borderRadius: '32px',
   },
+  overlay: {zIndex: 1500}
 };
 
 const TokenInsertModal = (props) => {

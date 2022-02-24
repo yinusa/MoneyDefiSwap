@@ -9,7 +9,7 @@ import {VscArrowSwap} from "react-icons/vsc";
 import TokenInsertModal from "./TokenInsertModal";
 import ReactApexChart from 'react-apexcharts';
 
-const ExchangeComponent = () => {
+const ExchangeComponent = ({account, requestAccount}) => {
   const themeState = React.useContext(ThemeContext.State);
   const [showGraphics, setShowGraphics] = React.useState(false);
   const [selectedDuration, setSelectedDuration] = React.useState(0);
@@ -190,7 +190,16 @@ const ExchangeComponent = () => {
             <span>{swapToken.symbol}</span>
             <AiOutlineReload className="exchange-reload"/>
           </div>
-          <button className={`exchange-connect-wallet ${themeState.on ? "exchange-connect-wallet-light" : "exchange-connect-wallet-dark"}`} >CONNECT WALLET</button>
+          <button onClick={requestAccount} className={`exchange-connect-wallet ${themeState.on ? "exchange-connect-wallet-light" : "exchange-connect-wallet-dark"}`} >
+            {
+              !account ? (
+                <div>CONNECT WALLET</div>
+              ): (
+                <div>{`${account.substring(0, 5)}..${account.substring(account.length - 5)}`}</div>
+              )
+            }
+            
+          </button>
         </div>
       </div>
       
