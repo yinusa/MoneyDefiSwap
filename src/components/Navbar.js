@@ -32,7 +32,16 @@ const Navbar = (props) => {
                     <span className='balance-f align-self-center'>36</span>
                     <span className='balance-e align-self-center'>.658</span>
                 </div>
-                <div className={`connect-wallet align-self-center justify-content-center ${themeState.on ? 'light_connect_wallet' : 'dark_connect_wallet'}`}>Connect Wallet</div>
+                <div onClick={props.requestAccount} className={`connect-wallet align-self-center justify-content-center ${themeState.on ? 'light_connect_wallet' : 'dark_connect_wallet'}`}>
+                    {
+                        !props.account ? (
+                            <div>Connect Wallet</div>
+                        ) : (
+                            <div>{`${props.account.substring(0, 5)}..${props.account.substring(props.account.length - 5)}`}</div>
+                        )
+                    }
+                    
+                </div>
                 <div>
                     <div className='language d-flex' onClick={dropDown}><div></div><FaChevronDown className='lang-drop'></FaChevronDown></div>
                     <div id="languageDropdown" className="language-content flex-column">

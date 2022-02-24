@@ -6,7 +6,7 @@ import Charactor1 from '../../assets/img/y1.svg'
 import Charactor2 from '../../assets/img/w2.svg'
 import ExchangeComponent from "../../components/ExchangeComponent";
 
-const Exchange = () => {
+const Exchange = (props) => {
     const themeState = React.useContext(ThemeContext.State);
     const [selectTab, setSelectTab] = React.useState(0);
 
@@ -26,7 +26,7 @@ const Exchange = () => {
             <div className="main-content">
                 <img className="image" src={themeState.on ? Charactor2 : Charactor1}></img>
                 <div className="main-area">
-                    <ExchangeComponent />
+                    <ExchangeComponent account={props.account} requestAccount={props.requestAccount} tokens={props.tokens}/>
                 </div>
             </div>
         </div>
