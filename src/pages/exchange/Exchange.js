@@ -26,7 +26,7 @@ const Exchange = (props) => {
             <div className="main-content">
                 <img className="image" src={themeState.on ? Charactor2 : Charactor1}></img>
                 <div className="main-area">
-                    <ExchangeComponent account={props.account} requestAccount={props.requestAccount}/>
+                    <ExchangeComponent account={props.account} requestAccount={props.requestAccount} tokens={props.tokens}/>
                 </div>
             </div>
         </div>

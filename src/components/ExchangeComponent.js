@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col } from "antd"
 import { ThemeContext } from '../contexts';
 import '../assets/css/exchangecomponent.css'
@@ -8,25 +8,24 @@ import {AiOutlineReload} from "react-icons/ai";
 import {VscArrowSwap} from "react-icons/vsc";
 import TokenInsertModal from "./TokenInsertModal";
 import ReactApexChart from 'react-apexcharts';
+import { ethers } from "ethers";
+import { network } from '../constants/network';
+import ERC20 from '../contracts/test/Token.sol/Token.json';
+import { formatUnits, parseUnits } from "ethers/lib/utils";
+import Router from '../contracts/UniswapV2Router02.sol/UniswapV2Router02.json';
+import { address } from "../constants/addresses";
 
-const ExchangeComponent = ({account, requestAccount}) => {
+const ExchangeComponent = ({account, requestAccount, tokens}) => {
+  const [amountIn, setAmountIn] = React.useState(0);
+  const [amountOut, setAmountOut] = React.useState(0);
   const themeState = React.useContext(ThemeContext.State);
   const [showGraphics, setShowGraphics] = React.useState(false);
   const [selectedDuration, setSelectedDuration] = React.useState(0);
   const [openSwapCoin, setOpenSwapCoin] = React.useState(false);
   const [openPurposeCoin, setOpenPurposeCoin] = React.useState(false);
   const [listToken, setListToken] = React.useState([
-    {name: 'Bitcoin', symbol: 'BTC', balance: 10},
-    {name: 'Ethereum', symbol: 'ETH', balance: 11},
-    {name: 'Tether', symbol: 'USDT', balance: 14},
-    {name: 'BNB', symbol: 'BNB', balance: 15.2},
-    {name: 'XRP', symbol: 'XRP', balance: 1.3},
-    {name: 'Solana', symbol: 'SOL', balance: 13.5},
-    {name: 'Terra', symbol: 'LUNA', balance: 0},
-    {name: 'Avalanche', symbol: 'AVAX', balance: 13.2},
-    {name: 'Dogecoin', symbol: 'DOGE', balance: 12.6},
-    {name: 'Polkadot', symbol: 'DOT', balance: 1.2},
-    {name: 'Polygon', symbol: 'MATIC', balance: 1.7},
+    {name: 'Bitcoin', symbol: 'BTC', balance: 0},
+    {name: 'Ethereum', symbol: 'ETH', balance: 0},
   ])
 
   const [swapToken, setSwapToken] = React.useState(listToken[0]);
@@ -85,6 +84,85 @@ const ExchangeComponent = ({account, requestAccount}) => {
     },
   })
 
+  // calculate balance
+  useEffect(() => {
+    async function getBalance() {
+      let balance = 0;
+      let tokenList = [];
+      for(let i = 0; i < tokens.length; i++) {
+        const provider = new ethers.providers.JsonRpcProvider(network.rpcUrls[0]);
+        const contract = new ethers.Contract(tokens[i].address, ERC20.abi, provider);
+        if(!account) {
+          balance = 0;
+        } else {
+          try {
+            balance = await contract.balanceOf(account);
+          } catch (err) {
+            throw err;
+          }
+        }        
+        tokenList.push({
+          name: tokens[i].name,
+          symbol: tokens[i].symbol,
+          balance: formatUnits(balance, tokens[i].decimals),
+          decimals: tokens[i].decimals,
+          address: tokens[i].address
+        });
+      }
+      
+      setListToken(tokenList);
+    }
+    getBalance();
+  },[account, tokens]);
+  // calculate amountOut
+  useEffect(() => {
+    async function getAmountOut() {
+      try {
+        const provider = new ethers.providers.JsonRpcBatchProvider(network.rpcUrls[0]);
+        const contract = new ethers.Contract(address['router'], Router.abi, provider);
+        const path = [swapToken.address, purposeToken.address];
+        const amounts = await contract.getAmountsOut(parseUnits(String(amountIn), swapToken.decimals), path);
+        setAmountOut(formatUnits(amounts[1], purposeToken.decimals));
+      } catch(err) {
+        throw err;
+      }
+    }
+    getAmountOut();
+  }, [amountIn, purposeToken, swapToken]);
+
+  // swap , request account
+  const swapTokens = async() => {
+    if(!account) {
+      requestAccount();
+    } else {
+      // approve
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(swapToken.address, ERC20.abi, signer);
+      await contract.approve(address['router'], parseUnits(String(amountIn), swapToken.decimals));
+      contract.once("Approval", async () => {
+        // swap
+        const routerContract = new ethers.Contract(address['router'], Router.abi, signer);
+        const path = [swapToken.address, purposeToken.address];
+        const today = new Date();
+        const deadline = (today.getTime() / 1000 + 60).toFixed();
+        const tx = await routerContract.swapExactTokensForTokens(
+          parseUnits(String(amountIn)),
+          0,
+          path,
+          String(account),
+          deadline
+        );
+        await tx.wait();
+        console.log("swaped");
+      });
+    }
+  }
+
+  const setAmountInByMax = () => {
+    setAmountIn(swapToken.balance);
+  }
+
   const handleClickDuration = index => {
     setSelectedDuration(index);
   }
@@ -116,7 +194,7 @@ const ExchangeComponent = ({account, requestAccount}) => {
           <div className={showGraphics ? "exchange-graphics-div-open" : "exchange-graphics-div-hide"}>
             <div className={`exchange-graphics-content ${themeState.on ? "exchange-graphics-content-light" : "exchange-graphics-content-dark"}`}>
               <div className="exchange-graphics-header">
-                <span className="exchange-graphics-coins">{swapToken.symbol} / {purposeToken.symbol}</span>
+                <span className="exchange-graphics-coins">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
                 <span className="exchange-graphics-basic-view">BASIC VIEW</span>
                 <span className="exchange-graphics-trading-view">TRADING VIEW</span>
               </div>
@@ -124,7 +202,7 @@ const ExchangeComponent = ({account, requestAccount}) => {
               <div className="exchange-graphics-control-area">
                 <div>
                   <span className="exchange-graphics-ratio">64.58</span>
-                  <span className="exchange-graphics-coins1">{swapToken.symbol} / {purposeToken.symbol}</span>
+                  <span className="exchange-graphics-coins1">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
                   <span className="exchange-graphics-percent">+0.296 (0.58%)</span>
                 </div>
                 <div className="exchange-graphics-control">
@@ -151,17 +229,17 @@ const ExchangeComponent = ({account, requestAccount}) => {
             <div className="exchange-type-area">
               <div className="exchange-type-select" onClick={()=>setOpenSwapCoin(true)}>
                 <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB} />
-                <span className="blockchain-name">{swapToken.symbol}</span>
+                <span className="blockchain-name">{swapToken ? swapToken.symbol : "BTC"}</span>
                 <MdKeyboardArrowDown className="arrow-down-icon" />
               </div>
               <div className="blockchain-balance">
                 <span>Available:</span>
-                <span>62.1246</span>
+                <span>{swapToken ? swapToken.balance : 0}</span>
               </div>
             </div>
             <div className="exchange-input-area">
-              <button className="btn-max">MAX</button>
-              <input className="exchange-input " placeholder="0.0"/>
+              <button onClick={setAmountInByMax} className="btn-max">MAX</button>
+              <input value={amountIn} onChange={e => setAmountIn(e.target.value)} className="exchange-input " placeholder="0.0"/>
             </div>
           </div>
           <VscArrowSwap className="btn-swap" onClick={handleChangeTokens} />
@@ -169,19 +247,20 @@ const ExchangeComponent = ({account, requestAccount}) => {
             <div className="exchange-type-area">
               <div className="exchange-type-select" onClick={()=>setOpenPurposeCoin(true)}>
                 <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB} src={BNB} />
-                <span className="blockchain-name">{purposeToken.symbol}</span>
+                <span className="blockchain-name">{purposeToken ? purposeToken.symbol : "ETH"}</span>
                 <MdKeyboardArrowDown className="arrow-down-icon" />
               </div>
               <div className="blockchain-balance">
                 <span>Available:</span>
-                <span>62.1246</span>
+                <span>{purposeToken ? purposeToken.balance : 0 }</span>
               </div>
             </div>
             <div className="exchange-input-area">
               <button className="btn-max">MAX</button>
-              <input className="exchange-input " placeholder="0.0"/>
+              <input value={amountOut} onChange={e => setAmountOut(e.target.value)} className="exchange-input " placeholder="0.0"/>
             </div>
           </div>
+          {purposeToken && swapToken ?
           <div className="exchange-ratio">
             <span>Price </span>
             <span>0.019616</span>
@@ -189,13 +268,14 @@ const ExchangeComponent = ({account, requestAccount}) => {
             <span> per </span>
             <span>{swapToken.symbol}</span>
             <AiOutlineReload className="exchange-reload"/>
-          </div>
-          <button onClick={requestAccount} className={`exchange-connect-wallet ${themeState.on ? "exchange-connect-wallet-light" : "exchange-connect-wallet-dark"}`} >
+          </div> : ""
+          }
+          <button onClick={swapTokens} className={`exchange-connect-wallet ${themeState.on ? "exchange-connect-wallet-light" : "exchange-connect-wallet-dark"}`} >
             {
               !account ? (
                 <div>CONNECT WALLET</div>
               ): (
-                <div>{`${account.substring(0, 5)}..${account.substring(account.length - 5)}`}</div>
+                <div>Swap</div>
               )
             }
             

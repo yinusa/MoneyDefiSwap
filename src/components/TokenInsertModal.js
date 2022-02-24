@@ -47,7 +47,7 @@ const TokenInsertModal = (props) => {
         <FaTimes className='modal-close' onClick={() => handleClose(0)} />
       </div>
       <div className='modal-body'>
-        <input className='modal-token-insert' placeholder='Seach name or paste address' />
+        <input className='modal-token-insert' placeholder='Search name or paste address' />
         <div className='modal-token-list'>
           {props.listToken.map((cell, index) => {
             return(<div key={index} className='modal-cell-main' onClick={() =>handleClose(index)}>
