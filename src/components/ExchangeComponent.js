@@ -9,9 +9,9 @@ import { VscArrowSwap } from "react-icons/vsc";
 import TokenInsertModal from "./TokenInsertModal";
 import ReactApexChart from 'react-apexcharts';
 import { ethers } from "ethers";
-import { network } from '../constants/network';
+import { network, chain } from '../constants/network';
 import ERC20 from '../contracts/test/Token.sol/Token.json';
-import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { formatUnits, parseEther, parseUnits } from "ethers/lib/utils";
 import Router from '../contracts/UniswapV2Router02.sol/UniswapV2Router02.json';
 import { address } from "../constants/addresses";
 
@@ -126,7 +126,7 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
       ]);
       try {
         const provider = new ethers.providers.JsonRpcBatchProvider(network.rpcUrls[0]);
-        const contract = new ethers.Contract(address['router'], Router.abi, provider);
+        const contract = new ethers.Contract(address[chain]['router'], Router.abi, provider);
         const path = [swapToken.address, purposeToken.address];
         const amounts = await contract.getAmountsOut(parseUnits(String(amountIn), swapToken.decimals), path);
         setAmountOut(formatUnits(amounts[1], purposeToken.decimals));
@@ -145,56 +145,53 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
       // approve
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(swapToken.address, ERC20.abi, signer);
-      await contract.approve(address['router'], parseUnits(String(amountIn), swapToken.decimals));
-      contract.once("Approval", async () => {
-        // swap
-        const routerContract = new ethers.Contract(address['router'], Router.abi, signer);
-        const path = [swapToken.address, purposeToken.address];
-        const today = new Date();
-        const deadline = (today.getTime() / 1000 + 60).toFixed();
-        const tx = await routerContract.swapExactTokensForTokens(
-          parseUnits(String(amountIn)),
+      const router = new ethers.Contract(address[chain]['router'], Router.abi, signer);
+      const today = new Date();
+      const deadline = (today.getTime() / 1000 + 60).toFixed();
+      const path = [swapToken.address, purposeToken.address];
+      if (swapToken.address.toLocaleLowerCase() === address[chain]['wether'].toLocaleLowerCase()) {
+        console.log("ether2token")
+        const swapTx = await router.swapExactETHForTokens(
           0,
           path,
           String(account),
-          deadline
+          deadline,
+          { value: amountIn * Math.pow(10, 18), gasLimit: 42000 }
         );
-        await tx.wait();
-
-        setAmountIn(0);
-        setAmountOut(0);
-      });
-    }
-  }
-  // chart
-  useEffect(() => {
-    async function getAmountOut() {
-      try {
-        const provider = new ethers.providers.JsonRpcBatchProvider(network.rpcUrls[0]);
-        const contract = new ethers.Contract(address['router'], Router.abi, provider);
-        const path = [swapToken.address, purposeToken.address];
-        const amounts = await contract.getAmountsOut(parseUnits(String("1"), swapToken.decimals), path);
-        let cut_data = (amounts[1]/amounts[0]).toFixed(2);
-        setRate(cut_data);
-        let data = chartsSeries[0].data;
-        data.push(amounts[1]/amounts[0]);
-        setChartSeries([
-          {
-            data: data
-          }
-        ]);
-      } catch (err) {
-        throw err;
+        await swapTx.wait();
+      } else if (purposeToken.address.toLocaleLowerCase() === address[chain]['wether'].toLocaleLowerCase()) {
+        console.log("token2ether")
+        const contract = new ethers.Contract(swapToken.address, ERC20.abi, signer);
+        await contract.approve(address[chain]['router'], parseUnits(String(amountIn), swapToken.decimals));
+        contract.once("Approval", async () => {
+          const swapTx = await router.swapExactTokensForETH(
+            parseEther(String(amountIn)),
+            0,
+            path,
+            String(account),
+            deadline,
+            {gasLimit: 42000}
+          );
+          await swapTx.wait();
+        });
+      } else {
+        const contract = new ethers.Contract(swapToken.address, ERC20.abi, signer);
+        await contract.approve(address['router'], parseUnits(String(amountIn), swapToken.decimals));
+        contract.once("Approval", async () => {
+          // swap
+          const tx = await router.swapExactTokensForTokens(
+            parseUnits(String(amountIn)),
+            0,
+            path,
+            String(account),
+            deadline
+          );
+          await tx.wait();
+          console.log("swaped");
+        });
       }
     }
-    const timer = setInterval(() => {
-      getAmountOut();
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    }
-  }, []);
+  }
 
   useEffect(() => {
     if(listToken[0] && listToken[1]) {
@@ -308,7 +305,7 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
           {purposeToken && swapToken ?
             <div className="exchange-ratio">
               <span>Price </span>
-              <span>{ `${rate}` }</span>
+              <span>{`${rate}`}</span>
               <span> {purposeToken.symbol} </span>
               <span> per </span>
               <span>{swapToken.symbol}</span>

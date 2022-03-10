@@ -85,11 +85,13 @@ export const scanSites = {
   "bsctest": "https://testnet.bscscan.com/"
 }
 let currentNetwork = null;
-
+let chainId = null
 if (process.env.NODE_ENV === 'development') {
-  currentNetwork = networkSettings[97];
-} else {
   currentNetwork = networkSettings[56];
+  chainId = 56;
+} else {
+  currentNetwork = networkSettings[97];
+  chainId = 97;
 }
 
 
@@ -111,4 +113,4 @@ export const switchNet = {
 export const network = {
   ...currentNetwork
 }
-
+export const chain = chainId;
