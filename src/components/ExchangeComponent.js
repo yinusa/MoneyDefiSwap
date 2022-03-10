@@ -25,9 +25,8 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
   const [openSwapCoin, setOpenSwapCoin] = React.useState(false);
   const [openPurposeCoin, setOpenPurposeCoin] = React.useState(false);
   const [listToken, setListToken] = React.useState([
-    { name: 'Token2', symbol: 'T2', balance: '0.0', decimals: 18, address: '0x4E2dA4fAD7C15eB60BEaF8A3C9f496a25DB67bC1' },
-    { name: 'Token1', symbol: 'T1', balance: '0.0', decimals: 18, address: '0xAD11DF3a7ee05920C6E016Ac571b64C29125aB46' },
-    { name: 'WETH', symbol: 'ETH', balance: '0.0', decimals: 18, address: '0xA8F92827e0905017eE68Ddc7e6Bf35B5CfEf5A13' }
+    { name: 'Wrapped BNB', symbol: 'WBNB', balance: '0.0', decimals: 18, address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c' },
+    { name: 'MoneydefiSwap', symbol: 'MSD', balance: '0.0', decimals: 18, address: '0xfA5D78d4517d2C5CCbAd2e56fA8Fc321d6544F2b' },
   ])
 
   const [swapToken, setSwapToken] = React.useState(listToken[0]);
@@ -98,7 +97,13 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
           balance = 0;
         } else {
           try {
-            balance = await contract.balanceOf(account);
+            if (tokens[i].address.toLocaleLowerCase() === address[chain]['wether'].toLocaleLowerCase()) {
+              const provider1 = new ethers.providers.Web3Provider(window.ethereum);
+              balance = await provider1.getBalance(account);
+              console.log(balance)
+            } else {
+              balance = await contract.balanceOf(account);
+            }
           } catch (err) {
             throw err;
           }
@@ -111,7 +116,7 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
           address: tokens[i].address
         });
       }
-
+      console.log(tokenList);
       tokenList.length != 0 && setListToken(tokenList);
     }
     getBalance();
@@ -288,7 +293,7 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
           <div className="exchange-select-part">
             <div className="exchange-type-area">
               <div className="exchange-type-select" onClick={() => setOpenPurposeCoin(true)}>
-                <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB} src={BNB} />
+                <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB}/>
                 <span className="blockchain-name">{purposeToken ? purposeToken.symbol : "ETH"}</span>
                 <MdKeyboardArrowDown className="arrow-down-icon" />
               </div>
