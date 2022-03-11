@@ -24,6 +24,7 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
   const [selectedDuration, setSelectedDuration] = React.useState(0);
   const [openSwapCoin, setOpenSwapCoin] = React.useState(false);
   const [openPurposeCoin, setOpenPurposeCoin] = React.useState(false);
+  const [currentdateTime, setCurrentDateTime] = React.useState('');
   const [listToken, setListToken] = React.useState([
     { name: 'Wrapped BNB', symbol: 'WBNB', balance: '0.0', decimals: 18, address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c' },
     { name: 'MoneydefiSwap', symbol: 'MSD', balance: '0.0', decimals: 18, address: '0xfA5D78d4517d2C5CCbAd2e56fA8Fc321d6544F2b' },
@@ -31,7 +32,10 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
 
   const [swapToken, setSwapToken] = React.useState(listToken[0]);
   const [purposeToken, setPurposeToken] = React.useState(listToken[1]);
-
+  const [rateValue, setRateValue] = React.useState({
+    changedValue: 0,
+    changedPercent: 0,
+  });
   const [chartsSeries, setChartSeries] = React.useState([
     {
       data: [1]
@@ -53,6 +57,9 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
     xaxis: {
       type: 'datetime',
       categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+    },
+    yaxis: {
+      show: false,
     },
     tooltip: {
       x: {
@@ -78,12 +85,90 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
       type: 'datetime',
       categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
     },
+    yaxis: {
+      show: false,
+    },
     tooltip: {
       x: {
         format: 'dd/MM/yy HH:mm'
       },
     },
   })
+
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  useEffect(() => {
+    var currentdate = new Date();
+    var hours = currentdate.getHours();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    var datetime = monthNames[currentdate.getMonth()] + " "
+                + (currentdate.getDate())  + "-" 
+                + currentdate.getFullYear() + ", "  
+                + hours + ":"  
+                + currentdate.getMinutes() + " "
+                + ampm;
+                
+    setCurrentDateTime(datetime);
+
+    const getChartList = async () => {
+      let term = "day";
+      switch(selectedDuration) {
+        case 0:
+          term = "day";
+          break;
+        case 1:
+          term = "week";
+          break;
+        case 2:
+          term = "month";
+          break;
+        case 3:
+          term = "year";
+          break;
+        default:
+          term = "day";
+      }
+      
+      const lists = await fetch("http://141.136.35.4:3000/rates?term=" + term + "&token0=" + swapToken.address + "&token1=" + purposeToken.address);
+      const jsonList = await lists.json();
+      console.log(jsonList);
+
+      let listDate = [];
+      let listValue = [];
+      for(var i = jsonList.length - 1; i >= 0; i--) {
+        listDate.push(jsonList[i].date);
+        listValue.push(jsonList[i].rate);
+      }
+
+      let chartValueLight = {...chartOptionLight};
+      console.log(chartValueLight);
+      chartValueLight.xaxis = {
+        type: 'datetime',
+        categories: listDate,
+      }
+      
+      let chartValueDark = {...chartOptionDark};
+      chartValueDark.xaxis = {
+        type: 'datetime',
+        categories: listDate,
+      }
+      let changedValue = listValue[listValue.length - 1] - listValue[0];
+      let changedPercent = changedValue/listValue[0] * 100;
+
+      setRateValue({
+        changedValue: changedValue,
+        changedPercent: changedPercent
+      })
+
+      setChartOptionLight(chartValueLight);
+      setChartOptionDark(chartValueDark);
+      setChartSeries([ {data: listValue} ])
+    }
+
+    getChartList();
+  }, [swapToken, purposeToken, selectedDuration]);
 
   useEffect(() => {
     const getRate = async ()  => {
@@ -261,12 +346,12 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
               <span className="exchange-graphics-basic-view">BASIC VIEW</span>
               <span className="exchange-graphics-trading-view">TRADING VIEW</span>
             </div>
-            <span className="exchange-graphics-current-time">Feb 03-2022, 11:39 PM</span>
+            <span className="exchange-graphics-current-time">{currentdateTime}</span>
             <div className="exchange-graphics-control-area">
               <div>
                 <div className="exchange-graphics-ratio">{rate}</div>
                 <span className="exchange-graphics-coins1">{swapToken && purposeToken ? <>{purposeToken.symbol} / {swapToken.symbol}</> : ""}</span>
-                <span className="exchange-graphics-percent">+0.296 (0.58%)</span>
+                <span className="exchange-graphics-percent">{rateValue.changedValue} ({rateValue.changedPercent.toFixed(2)}%)</span>
               </div>
               <div className="exchange-graphics-control">
                 <span className={`exchange-graphics-select-24h ${themeState.on ? selectedDuration == 0 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 0 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={() => handleClickDuration(0)}>24H</span>
