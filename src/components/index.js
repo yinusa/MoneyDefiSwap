@@ -14,7 +14,7 @@ import {
     Route,
     useRoutes
 } from 'react-router-dom';
-import { addNet, switchNet, network } from '../constants/network';
+import { addNet, switchNet, network, chain } from '../constants/network';
 import { ethers } from "ethers";
 import { address } from "../constants/addresses";
 import UniswapV2Factory from '../contracts/UniswapV2Factory.sol/UniswapV2Factory.json';
@@ -48,7 +48,7 @@ const Dashboard = () => {
         async function getTokens() {
             try {
                 const provider = new ethers.providers.JsonRpcProvider(network.rpcUrls[0]);
-                const factoryContract = new ethers.Contract(address['factory'], UniswapV2Factory.abi, provider);
+                const factoryContract = new ethers.Contract(address[chain]['factory'], UniswapV2Factory.abi, provider);
                 const pairsLength = await factoryContract.allPairsLength();
                 // get all pairs
                 let tokenList = [];
@@ -112,8 +112,6 @@ const Dashboard = () => {
                     <Sidebar collapsed={menuCollapse} />
                     <ScreenList account={userAccount} requestAccount={requestAccount} tokens={tokens}/>
                 </Router>
-
-
             </div>
             <Footer />
         </div >
