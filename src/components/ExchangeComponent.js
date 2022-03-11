@@ -9,9 +9,9 @@ import { VscArrowSwap } from "react-icons/vsc";
 import TokenInsertModal from "./TokenInsertModal";
 import ReactApexChart from 'react-apexcharts';
 import { ethers } from "ethers";
-import { network } from '../constants/network';
+import { network, chain } from '../constants/network';
 import ERC20 from '../contracts/test/Token.sol/Token.json';
-import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { formatUnits, parseEther, parseUnits } from "ethers/lib/utils";
 import Router from '../contracts/UniswapV2Router02.sol/UniswapV2Router02.json';
 import { address } from "../constants/addresses";
 
@@ -24,15 +24,18 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
   const [selectedDuration, setSelectedDuration] = React.useState(0);
   const [openSwapCoin, setOpenSwapCoin] = React.useState(false);
   const [openPurposeCoin, setOpenPurposeCoin] = React.useState(false);
+  const [currentdateTime, setCurrentDateTime] = React.useState('');
   const [listToken, setListToken] = React.useState([
-    { name: 'Token2', symbol: 'T2', balance: '0.0', decimals: 18, address: '0x4E2dA4fAD7C15eB60BEaF8A3C9f496a25DB67bC1' },
-    { name: 'Token1', symbol: 'T1', balance: '0.0', decimals: 18, address: '0xAD11DF3a7ee05920C6E016Ac571b64C29125aB46' },
-    { name: 'WETH', symbol: 'ETH', balance: '0.0', decimals: 18, address: '0xA8F92827e0905017eE68Ddc7e6Bf35B5CfEf5A13' }
+    { name: 'Wrapped BNB', symbol: 'WBNB', balance: '0.0', decimals: 18, address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c' },
+    { name: 'MoneydefiSwap', symbol: 'MSD', balance: '0.0', decimals: 18, address: '0xfA5D78d4517d2C5CCbAd2e56fA8Fc321d6544F2b' },
   ])
 
   const [swapToken, setSwapToken] = React.useState(listToken[0]);
   const [purposeToken, setPurposeToken] = React.useState(listToken[1]);
-
+  const [rateValue, setRateValue] = React.useState({
+    changedValue: 0,
+    changedPercent: 0,
+  });
   const [chartsSeries, setChartSeries] = React.useState([
     {
       data: [1]
@@ -54,6 +57,9 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
     xaxis: {
       type: 'datetime',
       categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+    },
+    yaxis: {
+      show: false,
     },
     tooltip: {
       x: {
@@ -79,12 +85,104 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
       type: 'datetime',
       categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
     },
+    yaxis: {
+      show: false,
+    },
     tooltip: {
       x: {
         format: 'dd/MM/yy HH:mm'
       },
     },
   })
+
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  useEffect(() => {
+    var currentdate = new Date();
+    var hours = currentdate.getHours();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    var datetime = monthNames[currentdate.getMonth()] + " "
+                + (currentdate.getDate())  + "-" 
+                + currentdate.getFullYear() + ", "  
+                + hours + ":"  
+                + currentdate.getMinutes() + " "
+                + ampm;
+                
+    setCurrentDateTime(datetime);
+
+    const getChartList = async () => {
+      let term = "day";
+      switch(selectedDuration) {
+        case 0:
+          term = "day";
+          break;
+        case 1:
+          term = "week";
+          break;
+        case 2:
+          term = "month";
+          break;
+        case 3:
+          term = "year";
+          break;
+        default:
+          term = "day";
+      }
+      
+      const lists = await fetch("http://141.136.35.4:3000/rates?term=" + term + "&token0=" + swapToken.address + "&token1=" + purposeToken.address);
+      const jsonList = await lists.json();
+      console.log(jsonList);
+
+      let listDate = [];
+      let listValue = [];
+      for(var i = jsonList.length - 1; i >= 0; i--) {
+        listDate.push(jsonList[i].date);
+        listValue.push(jsonList[i].rate);
+      }
+
+      let chartValueLight = {...chartOptionLight};
+      console.log(chartValueLight);
+      chartValueLight.xaxis = {
+        type: 'datetime',
+        categories: listDate,
+      }
+      
+      let chartValueDark = {...chartOptionDark};
+      chartValueDark.xaxis = {
+        type: 'datetime',
+        categories: listDate,
+      }
+      let changedValue = listValue[listValue.length - 1] - listValue[0];
+      let changedPercent = changedValue/listValue[0] * 100;
+
+      setRateValue({
+        changedValue: changedValue,
+        changedPercent: changedPercent
+      })
+
+      setChartOptionLight(chartValueLight);
+      setChartOptionDark(chartValueDark);
+      setChartSeries([ {data: listValue} ])
+    }
+
+    getChartList();
+  }, [swapToken, purposeToken, selectedDuration]);
+
+  useEffect(() => {
+    const getRate = async ()  => {
+      const provider = new ethers.providers.JsonRpcProvider(network.rpcUrls[0]);
+      const router = new ethers.Contract(address[chain]['router'], Router.abi, provider);
+      const path = [swapToken.address, purposeToken.address];
+      const amounts = await router.getAmountsOut(ethers.utils.parseEther("1"), path);
+      const amount1 = ethers.utils.formatEther(amounts[0]);
+      const amount2 = ethers.utils.formatEther(amounts[1]);
+      const rate = Number(amount2) / Number(amount1);
+      setRate(rate);
+    }
+    getRate();
+  }, [swapToken]);
 
   // calculate balance
   useEffect(() => {
@@ -98,7 +196,13 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
           balance = 0;
         } else {
           try {
-            balance = await contract.balanceOf(account);
+            if (tokens[i].address.toLocaleLowerCase() === address[chain]['wether'].toLocaleLowerCase()) {
+              const provider1 = new ethers.providers.Web3Provider(window.ethereum);
+              balance = await provider1.getBalance(account);
+              console.log(balance)
+            } else {
+              balance = await contract.balanceOf(account);
+            }
           } catch (err) {
             throw err;
           }
@@ -111,9 +215,10 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
           address: tokens[i].address
         });
       }
-
+      console.log(tokenList);
       tokenList.length != 0 && setListToken(tokenList);
     }
+    
     getBalance();
   }, [account, tokens]);
   // calculate amountOut
@@ -126,9 +231,10 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
       ]);
       try {
         const provider = new ethers.providers.JsonRpcBatchProvider(network.rpcUrls[0]);
-        const contract = new ethers.Contract(address['router'], Router.abi, provider);
+        const contract = new ethers.Contract(address[chain]['router'], Router.abi, provider);
         const path = [swapToken.address, purposeToken.address];
         const amounts = await contract.getAmountsOut(parseUnits(String(amountIn), swapToken.decimals), path);
+        console.log(amounts);
         setAmountOut(formatUnits(amounts[1], purposeToken.decimals));
       } catch (err) {
         throw err;
@@ -145,56 +251,53 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
       // approve
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(swapToken.address, ERC20.abi, signer);
-      await contract.approve(address['router'], parseUnits(String(amountIn), swapToken.decimals));
-      contract.once("Approval", async () => {
-        // swap
-        const routerContract = new ethers.Contract(address['router'], Router.abi, signer);
-        const path = [swapToken.address, purposeToken.address];
-        const today = new Date();
-        const deadline = (today.getTime() / 1000 + 60).toFixed();
-        const tx = await routerContract.swapExactTokensForTokens(
-          parseUnits(String(amountIn)),
+      const router = new ethers.Contract(address[chain]['router'], Router.abi, signer);
+      const today = new Date();
+      const deadline = (today.getTime() / 1000 + 60).toFixed();
+      const path = [swapToken.address, purposeToken.address];
+      if (swapToken.address.toLocaleLowerCase() === address[chain]['wether'].toLocaleLowerCase()) {
+        console.log("ether2token")
+        const swapTx = await router.swapExactETHForTokens(
           0,
           path,
           String(account),
-          deadline
+          deadline,
+          { value: amountIn * Math.pow(10, 18), gasLimit: 42000 }
         );
-        await tx.wait();
-
-        setAmountIn(0);
-        setAmountOut(0);
-      });
-    }
-  }
-  // chart
-  useEffect(() => {
-    async function getAmountOut() {
-      try {
-        const provider = new ethers.providers.JsonRpcBatchProvider(network.rpcUrls[0]);
-        const contract = new ethers.Contract(address['router'], Router.abi, provider);
-        const path = [swapToken.address, purposeToken.address];
-        const amounts = await contract.getAmountsOut(parseUnits(String("1"), swapToken.decimals), path);
-        let cut_data = (amounts[1]/amounts[0]).toFixed(2);
-        setRate(cut_data);
-        let data = chartsSeries[0].data;
-        data.push(amounts[1]/amounts[0]);
-        setChartSeries([
-          {
-            data: data
-          }
-        ]);
-      } catch (err) {
-        throw err;
+        await swapTx.wait();
+      } else if (purposeToken.address.toLocaleLowerCase() === address[chain]['wether'].toLocaleLowerCase()) {
+        console.log("token2ether")
+        const contract = new ethers.Contract(swapToken.address, ERC20.abi, signer);
+        await contract.approve(address[chain]['router'], parseUnits(String(amountIn), swapToken.decimals));
+        contract.once("Approval", async () => {
+          const swapTx = await router.swapExactTokensForETH(
+            parseEther(String(amountIn)),
+            0,
+            path,
+            String(account),
+            deadline,
+            {gasLimit: 42000}
+          );
+          await swapTx.wait();
+        });
+      } else {
+        const contract = new ethers.Contract(swapToken.address, ERC20.abi, signer);
+        await contract.approve(address['router'], parseUnits(String(amountIn), swapToken.decimals));
+        contract.once("Approval", async () => {
+          // swap
+          const tx = await router.swapExactTokensForTokens(
+            parseUnits(String(amountIn)),
+            0,
+            path,
+            String(account),
+            deadline
+          );
+          await tx.wait();
+          console.log("swaped");
+        });
       }
     }
-    const timer = setInterval(() => {
-      getAmountOut();
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    }
-  }, []);
+  }
 
   useEffect(() => {
     if(listToken[0] && listToken[1]) {
@@ -239,16 +342,16 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
         <div className={showGraphics ? "exchange-graphics-div-open" : "exchange-graphics-div-hide"}>
           <div className={`exchange-graphics-content ${themeState.on ? "exchange-graphics-content-light" : "exchange-graphics-content-dark"}`}>
             <div className="exchange-graphics-header">
-              <span className="exchange-graphics-coins">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
+              <span className="exchange-graphics-coins">{swapToken && purposeToken ? <>{purposeToken.symbol} / {swapToken.symbol}</> : ""}</span>
               <span className="exchange-graphics-basic-view">BASIC VIEW</span>
               <span className="exchange-graphics-trading-view">TRADING VIEW</span>
             </div>
-            <span className="exchange-graphics-current-time">Feb 03-2022, 11:39 PM</span>
+            <span className="exchange-graphics-current-time">{currentdateTime}</span>
             <div className="exchange-graphics-control-area">
               <div>
-                <span className="exchange-graphics-ratio">{rate}</span>
-                <span className="exchange-graphics-coins1">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
-                <span className="exchange-graphics-percent">+0.296 (0.58%)</span>
+                <div className="exchange-graphics-ratio">{rate}</div>
+                <span className="exchange-graphics-coins1">{swapToken && purposeToken ? <>{purposeToken.symbol} / {swapToken.symbol}</> : ""}</span>
+                <span className="exchange-graphics-percent">{rateValue.changedValue} ({rateValue.changedPercent.toFixed(2)}%)</span>
               </div>
               <div className="exchange-graphics-control">
                 <span className={`exchange-graphics-select-24h ${themeState.on ? selectedDuration == 0 ? "exchange-graphics-select-dark" : "exchange-graphics-select-light" : selectedDuration == 0 ? "exchange-graphics-select-light" : "exchange-graphics-select-dark"}`} onClick={() => handleClickDuration(0)}>24H</span>
@@ -291,7 +394,7 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
           <div className="exchange-select-part">
             <div className="exchange-type-area">
               <div className="exchange-type-select" onClick={() => setOpenPurposeCoin(true)}>
-                <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB} src={BNB} />
+                <img className={`blockchain-icon ${themeState.on ? "blockchain-icon-light" : "blockchain-icon-dark"}`} src={BNB}/>
                 <span className="blockchain-name">{purposeToken ? purposeToken.symbol : "ETH"}</span>
                 <MdKeyboardArrowDown className="arrow-down-icon" />
               </div>
@@ -308,7 +411,7 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
           {purposeToken && swapToken ?
             <div className="exchange-ratio">
               <span>Price </span>
-              <span>{ `${rate}` }</span>
+              <span>{`${rate}`}</span>
               <span> {purposeToken.symbol} </span>
               <span> per </span>
               <span>{swapToken.symbol}</span>
