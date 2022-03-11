@@ -85,6 +85,20 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
     },
   })
 
+  useEffect(() => {
+    const getRate = async ()  => {
+      const provider = new ethers.providers.JsonRpcProvider(network.rpcUrls[0]);
+      const router = new ethers.Contract(address[chain]['router'], Router.abi, provider);
+      const path = [swapToken.address, purposeToken.address];
+      const amounts = await router.getAmountsOut(ethers.utils.parseEther("1"), path);
+      const amount1 = ethers.utils.formatEther(amounts[0]);
+      const amount2 = ethers.utils.formatEther(amounts[1]);
+      const rate = Number(amount2) / Number(amount1);
+      setRate(rate);
+    }
+    getRate();
+  }, [swapToken]);
+
   // calculate balance
   useEffect(() => {
     async function getBalance() {
@@ -119,6 +133,7 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
       console.log(tokenList);
       tokenList.length != 0 && setListToken(tokenList);
     }
+    
     getBalance();
   }, [account, tokens]);
   // calculate amountOut
@@ -134,6 +149,7 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
         const contract = new ethers.Contract(address[chain]['router'], Router.abi, provider);
         const path = [swapToken.address, purposeToken.address];
         const amounts = await contract.getAmountsOut(parseUnits(String(amountIn), swapToken.decimals), path);
+        console.log(amounts);
         setAmountOut(formatUnits(amounts[1], purposeToken.decimals));
       } catch (err) {
         throw err;
@@ -241,15 +257,15 @@ const ExchangeComponent = ({ account, requestAccount, tokens }) => {
         <div className={showGraphics ? "exchange-graphics-div-open" : "exchange-graphics-div-hide"}>
           <div className={`exchange-graphics-content ${themeState.on ? "exchange-graphics-content-light" : "exchange-graphics-content-dark"}`}>
             <div className="exchange-graphics-header">
-              <span className="exchange-graphics-coins">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
+              <span className="exchange-graphics-coins">{swapToken && purposeToken ? <>{purposeToken.symbol} / {swapToken.symbol}</> : ""}</span>
               <span className="exchange-graphics-basic-view">BASIC VIEW</span>
               <span className="exchange-graphics-trading-view">TRADING VIEW</span>
             </div>
             <span className="exchange-graphics-current-time">Feb 03-2022, 11:39 PM</span>
             <div className="exchange-graphics-control-area">
               <div>
-                <span className="exchange-graphics-ratio">{rate}</span>
-                <span className="exchange-graphics-coins1">{swapToken && purposeToken ? <>{swapToken.symbol} / {purposeToken.symbol}</> : ""}</span>
+                <div className="exchange-graphics-ratio">{rate}</div>
+                <span className="exchange-graphics-coins1">{swapToken && purposeToken ? <>{purposeToken.symbol} / {swapToken.symbol}</> : ""}</span>
                 <span className="exchange-graphics-percent">+0.296 (0.58%)</span>
               </div>
               <div className="exchange-graphics-control">
