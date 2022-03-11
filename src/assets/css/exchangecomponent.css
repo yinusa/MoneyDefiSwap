@@ -1,0 +1,365 @@
+.exchange-main {
+  display: inline-flex;
+}
+.exchange-container {
+  border-radius: 20px;
+  padding: 30px 15px;
+  text-align: center;
+}
+.exchange-container-dark {
+  background: #E0B000;
+}
+.exchange-container-light {
+  background: #273252;
+}
+.exchange-text-light {
+  color: #fff;
+}
+.exchange-text-dark {
+  color: #151C2F;
+}
+.exchange-header {
+  border-style: solid;
+}
+.exchange-header-dark {
+  border: solid #151C2F;
+  border-width: 0 0 1px 0px;
+}
+.exchange-header-light {
+  border: solid #fff;
+  border-width: 0 0 1px 0px;
+}
+.exchange-body {
+  padding: 20px 10px;
+}
+.exchange-type-area {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+}
+.exchange-type-select {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.blockchain-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+.blockchain-icon-dark {
+  border: 4px solid #151C2F;
+}
+.blockchain-icon-light {
+  border: 4px solid #E0B000;
+}
+.blockchain-name {
+  margin-left: 7px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+}
+.arrow-down-icon {
+  font-size: 30px;
+}
+.blockchain-balance{
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-left: auto;
+}
+.exchange-input-area {
+  height: 75px;
+  width: 429px;
+  border-radius: 20px;
+  background: #F7DE81;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 15px;
+  margin-top: 7px;
+}
+.btn-max {
+  height: 33px;
+  width: 94px;
+  border-radius: 10px;
+  border: none;
+  background: #151C2F;
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: 0em;
+  color: #E0B000;
+  margin-right: 15px;
+}
+.exchange-input {
+  width: auto;
+  border: none;
+  background: none;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: right;
+  outline: none;
+}
+.exchange-select-part {
+  display: grid;
+}
+.btn-swap {
+  font-size: 35px;
+  margin: 15px 0;
+  cursor: pointer;
+}
+.exchange-ratio {
+  font-family: Source Serif Pro;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: right;
+  margin-top: 15px;
+}
+.exchange-reload {
+  font-size: 25px;
+  margin-left: 25px;
+  cursor: pointer;
+}
+.exchange-connect-wallet {
+  height: 57px;
+  width: 250px;
+  border-radius: 20px;
+  font-family: Roboto;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: 0em;
+  text-align: left;
+  border: none;
+  text-align: center;
+  margin-top: 60px;
+}
+.exchange-connect-wallet-dark {
+  color: #E0B000;
+  background: #151C2F;
+}
+.exchange-connect-wallet-light {
+  color: #151C2F;
+  background: #E0B000;
+}
+.exchange-graphics-area {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin-right: -20px;
+  overflow:hidden;
+  border-radius: 20px 0px 0px 20px;
+  transition: width 0.5s ease-in-out;
+}
+.exchange-graphics-area-close {
+  width: 50px;
+}
+.exchange-graphics-area-open {
+  width: 800px;
+}
+.exchange-graphics-area-dark {
+  background-color: #F7DE81;
+}
+.exchange-graphics-area-light {
+  background-color: #151C2F;
+}
+.exchange-graphics-arrow-icon {
+  font-size: 30px;
+  cursor: pointer;
+}
+.exchange-graphics-arrow-icon-dark {
+  color: #000;
+}
+.exchange-graphics-arrow-icon-light {
+  color: #fff;
+}
+.exchange-graphics-div-open {
+  width: 100%;
+  height: 100%;
+  padding: 15px 35px 15px 0px;
+  transition: width 0.5s ease-in-out;
+}
+.exchange-graphics-div-hide {
+  width: 0%;
+  height: 100%;
+  padding: 15px 0px;
+  overflow: hidden;
+  transition: width 0.5s ease-in-out;
+}
+.exchange-graphics-content {
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  padding: 50px 40px;
+  white-space:nowrap;
+}
+.exchange-graphics-content-dark {
+  color: #fff;
+  background: #151C2F;
+}
+.exchange-graphics-content-light {
+  color: #151C2F;
+  background: #FFF4CA;
+}
+.exchange-graphics-header {
+  display: flex;
+  justify-content: center;
+}
+.exchange-graphics-coins {
+  font-family: Roboto;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.exchange-graphics-basic-view {
+  width: 108px;
+  height: 32px;
+  margin-left: 50px;
+  background: #E0B000;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #151C2F;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.exchange-graphics-trading-view {
+  width: 108px;
+  height: 32px;
+  margin-left: 10px;
+  background: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #151C2F;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.exchange-graphics-current-time {
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.exchange-graphics-ratio {
+  font-family: Righteous;
+  font-size: 45px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 56px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.exchange-graphics-coins1 {
+  font-family: Roboto;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-left: 3px;
+}
+.exchange-graphics-percent {
+  font-family: Roboto;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #00FF38;
+  margin-left: 8px;
+}
+.exchange-graphics-control-area {
+  display: flex;
+}
+.exchange-graphics-control {
+  display: flex;
+  align-items: flex-end;
+  margin-left: auto;
+}
+.exchange-graphics-select-24h {
+  width: 43px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px 0px 0px 12px;
+  cursor: pointer;
+  border: 1px solid #E0B000;
+}
+.exchange-graphics-select-1w {
+  width: 43px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #E0B000;
+}
+.exchange-graphics-select-1m {
+  width: 43px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #E0B000;
+}
+.exchange-graphics-select-1y {
+  width: 43px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0px 12px 12px 0px;
+  cursor: pointer;
+  border: 1px solid #E0B000;
+}
+.exchange-graphics-select-light {
+  color: #151C2F;
+  background: #E0B000;
+}
+.exchange-graphics-select-dark {
+  color: #E0B000;
+  background: #151C2F;
+}
+.exchange-graphics-view-area {
+  margin-top: 30px;
+}
+.exchange-graphics .apexcharts-toolbar {
+  z-index: 0;
+}

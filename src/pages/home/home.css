@@ -1,0 +1,146 @@
+.home {
+  z-index: 1;
+  position: relative;
+}
+
+.home-font1 {
+  font-family: Spicy Rice;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 70px;
+  line-height: 80px;
+}
+
+.dark_home_font1 {
+  color: #ffffff;
+}
+
+.light_home_font1 {
+  color: #001F65;
+}
+
+.home-font2 {
+  font-family: Source Serif Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 50px;
+  line-height: 63px;
+}
+
+.dark_home_font2 {
+  color: #ffffff;
+}
+
+.light_home_font2 {
+  color: #151C2F;
+}
+
+.home-font3 {
+  font-family: Source Serif Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 19px;
+  color: #e0b000;
+}
+
+.dark_home_font3 {
+  color: #e0b000;
+}
+
+.light_home_font3 {
+  color: #151C2F;
+}
+
+.first-article img:first-child {
+  width: 720px;
+  height: 650px;
+}
+
+.first-article-topic {
+  line-height: 97px;
+  max-width: 475px;
+  margin-top: 128px;
+}
+
+.first-article-explain {
+  width: 487px;
+}
+
+.first-article-content {
+  width: 500px;
+  height: 57px;
+}
+
+.btn-home-trade {
+  margin-top: 15px;
+  width: 238px;
+  height: 58px;
+  border-radius: 12px;
+  border: none;
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 26px;
+}
+
+.dark-btn-home-trade {
+  background: #e0b000;
+  color: #000000;
+}
+
+.light-btn-home-trade {
+  background: #001F66;
+  color: #E0B000;
+}
+
+.second-article {
+  margin-top: 217px;
+  position: relative;
+  margin-bottom: 173px;
+}
+
+.second-article-topic {
+  width: 610px;
+  height: 160px;
+  margin-bottom: 34px;
+}
+
+.second-article-content {
+  width: 755px;
+}
+
+.second-article > div:last-child {
+  position: absolute;
+  width: 600px;
+  height: 529px;
+  right: 34px;
+  top: 28px;
+}
+.second-article img {
+  width: auto;
+  opacity: 0.55;
+  width: inherit;
+}
+
+.third-article {
+  margin-bottom: 104px;
+}
+
+.third-article img:first-child {
+  width: 487px;
+  height: 536px;
+  margin: 46px 0 0 70px;
+}
+
+.third-article-topic {
+  width: 462px;
+  margin-top: 131px;
+}
+
+.third-article-content {
+  width: 519px;
+  margin-top: 34px;
+}

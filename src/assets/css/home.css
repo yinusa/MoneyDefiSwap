@@ -8,8 +8,6 @@
 }
 
 .home-font2 {
-  width: 487px;
-  height: 189px;
   font-family: Source Serif Pro;
   font-style: normal;
   font-weight: normal;
@@ -19,8 +17,6 @@
 }
 
 .home-font3 {
-  width: 537px;
-  height: 57px;
   font-family: Source Serif Pro;
   font-style: normal;
   font-weight: normal;
@@ -30,19 +26,23 @@
 }
 
 .first-article img:first-child {
-  width: 750px;
+  width: 720px;
   height: 650px;
-}
-
-.first-article > div:last-child {
-  margin-right: 55px;
 }
 
 .first-article-topic {
   line-height: 97px;
-  width: 475px;
-  height: 97px;
+  max-width: 475px;
   margin-top: 128px;
+}
+
+.first-article-explain {
+  width: 487px;
+}
+
+.first-article-content {
+  width: 500px;
+  height: 57px;
 }
 
 .btn-home-trade {
@@ -62,7 +62,7 @@
 }
 
 .second-article {
-  margin-top: 177px;
+  margin-top: 217px;
   position: relative;
   margin-bottom: 173px;
 }
@@ -79,7 +79,6 @@
 
 .second-article-content {
   width: 755px;
-  height: 133px;
 }
 
 .second-article > div:last-child {
@@ -103,22 +102,15 @@
 .third-article img:first-child {
   width: 487px;
   height: 536px;
-  margin-top: 46px;
-  margin-right: 130px;
-}
-
-.third-article > div:last-child {
-  margin-right: 105px;
+  margin: 46px 0 0 70px;
 }
 
 .third-article-topic {
   width: 462px;
-  height: 160px;
   margin-top: 131px;
 }
 
-.third -article-content {
+.third-article-content {
   width: 519px;
-  height: 171px;
   margin-top: 34px;
 }

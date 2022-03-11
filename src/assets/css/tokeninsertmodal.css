@@ -1,0 +1,66 @@
+.modal-header {
+  color: #fff;
+}
+.modal-header-title {
+  color: #fff;
+}
+.modal-close {
+  cursor: pointer;
+}
+.modal-token-insert {
+  width: 100%;
+  height: 48px;
+  font-size: 16px;
+  padding: 0px 16px;
+  border-radius: 16px;
+  border: 1px solid rgb(215, 202, 236);
+  color: #151C2F;
+}
+.modal-token-list {
+  height: 390px;
+  margin: 24px 0;
+  overflow: auto;
+  scrollbar-color: #6969dd #e0e0e0;
+  scrollbar-width: thin;
+}
+.modal-cell-main {
+  width: 100%;
+  padding: 3px 5px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.modal-cell-type {
+  margin-left: 5px;
+}
+.modal-cell-symbol {
+  font-weight: bold;
+}
+.modal-cell-balance {
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: bold;
+}
+.disable-color {
+  color: #ffffff33;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 5px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #E0B000; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7e6200; 
+}
